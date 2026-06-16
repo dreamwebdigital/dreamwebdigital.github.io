@@ -1,198 +1,146 @@
-<!-- ===================================================================
-     COVERAGE + BENEFITS SECTION  —  paste this ENTIRE block into one
-     Elementor HTML widget. All CSS is scoped under #mntl-coverage so
-     it will not affect the rest of your page (and won't collide with
-     the #mntl-docs table — both can live on the same page).
-     Edit names, plan details, and progress values directly below.
-==================================================================== -->
-<style>
-#mntl-coverage *{box-sizing:border-box;margin:0;padding:0}
-#mntl-coverage{
-  --head:#15505f; --name:#16324a; --text:#2b3a4a; --muted:#6b7787;
-  --card-1:#1b3a4f; --card-2:#0f2636;           /* dark insurance card gradient */
-  --gray-bg:#e8eaed; --gray-tx:#45546a;
-  --green-bg:#d4edd6; --green-tx:#37833f;
-  --amber-tx:#bf7733;                            /* "% met" figure */
-  --link:#2f8a99;
-  --track:#e6e9ec; --fill:#16324a;               /* progress bar */
-  --border:#eef0f2; --panel-bd:#e9edf0; --btn-bd:#d9dee3;
-  font-family:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  color:var(--text);line-height:1.4;width:100%;-webkit-font-smoothing:antialiased;
-}
-#mntl-coverage .shadow{box-shadow:0 12px 34px -16px rgba(20,70,80,.30)}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRI Investing — Horizon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-/* ---------- top header bar ---------- */
-#mntl-coverage .cov-bar{display:flex;align-items:center;gap:34px;flex-wrap:wrap;
-  background:#fff;border:1px solid var(--panel-bd);border-radius:16px;padding:18px 24px;
-  box-shadow:0 12px 34px -16px rgba(20,70,80,.30);margin-bottom:20px}
-#mntl-coverage .who{display:flex;align-items:center;gap:14px}
-#mntl-coverage .who .ring{flex:none;width:44px;height:44px;border-radius:50%;
-  border:2px solid var(--gray-bg);display:flex;align-items:center;justify-content:center;color:var(--muted)}
-#mntl-coverage .who .nm{font-size:17px;font-weight:700;color:var(--name);letter-spacing:-.2px}
-#mntl-coverage .verified{display:inline-flex;align-items:center;gap:6px;margin-top:4px;
-  background:var(--green-bg);color:var(--green-tx);font-size:12px;font-weight:600;
-  padding:3px 10px;border-radius:20px}
-#mntl-coverage .field .lab{font-size:11px;font-weight:600;letter-spacing:.6px;
-  text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-#mntl-coverage .field .val{font-size:15px;font-weight:600;color:var(--name)}
-#mntl-coverage .field .val .sub{color:var(--muted);font-weight:500;margin-left:8px}
-#mntl-coverage .cov-bar .upd{margin-left:auto;display:inline-flex;align-items:center;gap:8px;
-  border:none;cursor:pointer;background:var(--head);color:#fff;font-family:inherit;
-  font-weight:600;font-size:14px;padding:11px 20px;border-radius:10px;transition:background .15s}
-#mntl-coverage .cov-bar .upd:hover{background:#11414e}
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="11.5" r="6" fill="#E3AC46"/><line x1="2" y1="18" x2="24" y2="18" stroke="#1F635A" stroke-width="1.7"/></svg>HORIZON</a>
+    <input type="checkbox" id="navtoggle" class="nav-toggle" hidden>
+    <label for="navtoggle" class="nav-burger" aria-label="Open menu"><span></span></label>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="why-trust-us.html">Why Trust Us</a>
+      <a href="about.html">About Us</a>
+      <a href="bri-investing.html" class="active">BRI Investing</a>
+      <a href="my-story.html">My Story</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html#open" class="nav-cta">Open an account</a>
+    </nav>
+  </div>
+</header>
 
-/* ---------- two-column layout ---------- */
-#mntl-coverage .cov-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
-#mntl-coverage .panel{background:#fff;border:1px solid var(--panel-bd);border-radius:16px;
-  padding:22px 24px;box-shadow:0 12px 34px -16px rgba(20,70,80,.30)}
-#mntl-coverage .panel > h4{font-size:15px;font-weight:700;color:var(--name);
-  letter-spacing:-.1px;margin-bottom:16px}
+<section class="pagehead on-dark">
+  <div class="pagehead-inner">
+    <span class="eyebrow">Biblically responsible investing</span>
+    <h1>Honoring God with your <span class="gold-word">investments</span></h1>
+    <p class="lead">"Whatever you do, do it all for the glory of God." Biblically responsible investing takes 1&nbsp;Corinthians&nbsp;10:31 at face value — and brings it to your portfolio.</p>
+  </div>
+</section>
 
-/* ---------- insurance card ---------- */
-#mntl-coverage .icard{position:relative;overflow:hidden;border-radius:14px;
-  background:#fff;border:1px solid var(--panel-bd)}
-#mntl-coverage .icard .ihead{position:relative;display:flex;align-items:flex-start;justify-content:space-between;
-  background:linear-gradient(135deg,var(--card-1),var(--card-2));color:#fff;padding:18px 22px}
-#mntl-coverage .icard .brand{font-size:19px;font-weight:700;letter-spacing:.2px}
-#mntl-coverage .icard .tier{font-size:13px;font-weight:600;color:rgba(255,255,255,.85);
-  border:1px solid rgba(255,255,255,.28);padding:3px 11px;border-radius:7px}
-#mntl-coverage .icard .dots{position:absolute;top:12px;left:50%;transform:translateX(-50%);
-  display:flex;gap:6px}
-#mntl-coverage .icard .dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.22)}
-#mntl-coverage .icard .ibody{padding:22px}
-#mntl-coverage .icard .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 16px}
-#mntl-coverage .icard .ci .k{font-size:11px;font-weight:600;letter-spacing:.5px;
-  text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-#mntl-coverage .icard .ci .v{font-size:15px;font-weight:600;color:var(--name)}
-#mntl-coverage .viewfull{display:inline-flex;align-items:center;gap:7px;margin-top:18px;
-  width:100%;justify-content:center;color:var(--link);font-size:14px;font-weight:600;
-  text-decoration:none}
-#mntl-coverage .viewfull:hover{text-decoration:underline}
+<!-- WHAT IS BRI -->
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <span class="eyebrow">What is BRI?</span>
+      <h2 class="mt-s">Investing that reflects what you believe</h2>
+      <p class="lead mt-s">Biblically responsible investing aligns your money with your faith — without giving up real, active strategy. We build the BRI model using Inspire's framework, which works in three ways.</p>
+    </div>
+    <div class="ph cream tall"><span class="ph-tag">Image — faith &amp; finance</span></div>
+  </div>
+</section>
 
-/* ---------- benefits ---------- */
-#mntl-coverage .ben{padding:16px 0;border-bottom:1px solid var(--border)}
-#mntl-coverage .ben:first-of-type{padding-top:0}
-#mntl-coverage .ben:last-child{border-bottom:none;padding-bottom:0}
-#mntl-coverage .ben .top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-#mntl-coverage .ben .blab{font-size:15px;font-weight:600;color:var(--name)}
-#mntl-coverage .ben .met{font-size:14px;font-weight:700;color:var(--amber-tx);white-space:nowrap}
-#mntl-coverage .ben .amt{font-size:13px;color:var(--muted);margin-top:3px}
-#mntl-coverage .bar{height:9px;border-radius:6px;background:var(--track);margin-top:11px;overflow:hidden}
-#mntl-coverage .bar > span{display:block;height:100%;border-radius:6px;background:var(--fill)}
-#mntl-coverage .ben.pa .top{align-items:center}
-#mntl-coverage .ben.pa .pmeta .amt{margin-top:2px}
-#mntl-coverage .ben.pa .check{flex:none;width:34px;height:34px;border-radius:50%;
-  background:var(--green-bg);color:var(--green-tx);display:flex;align-items:center;justify-content:center}
+<!-- THREEFOLD -->
+<section class="section bg-cream2">
+  <div class="wrap">
+    <div style="max-width:600px;margin-bottom:40px">
+      <span class="eyebrow">Inspire's approach</span>
+      <h2 class="mt-s">Endorse. Engage. Exclude.</h2>
+    </div>
+    <div class="grid g-3">
+      <article class="card">
+        <div class="feature"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4c2 3 5 4 7 4-1 7-4 10-7 12-3-2-6-5-7-12 2 0 5-1 7-4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12.5 11 14.5 15 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        <h3>Endorse</h3>
+        <p class="mt-s" style="color:var(--stone)">Support companies making a positive impact on the world.</p>
+      </article>
+      <article class="card">
+        <div class="feature"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 9h10M7 13h6M5 4h14a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4 3V5a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div></div>
+        <h3>Engage</h3>
+        <p class="mt-s" style="color:var(--stone)">Work with companies to create positive, Biblical change from within.</p>
+      </article>
+      <article class="card">
+        <div class="feature"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M7 7l10 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div></div>
+        <h3>Exclude</h3>
+        <p class="mt-s" style="color:var(--stone)">Screen out companies involved in immoral issues.</p>
+      </article>
+    </div>
+  </div>
+</section>
 
-/* ---------- responsive ---------- */
-@media(max-width:820px){
-  #mntl-coverage .cov-grid{grid-template-columns:1fr}
-}
-@media(max-width:600px){
-  #mntl-coverage .cov-bar{gap:18px 26px;padding:16px 18px}
-  #mntl-coverage .cov-bar .upd{margin-left:0;width:100%;justify-content:center}
-  #mntl-coverage .panel{padding:18px}
-}
-</style>
+<!-- ALIGN + SCORING -->
+<section class="section">
+  <div class="wrap split split--narrow">
+    <div>
+      <span class="eyebrow">BRI scoring</span>
+      <h2 class="mt-s">Align your investments with what you believe</h2>
+      <p class="lead mt-s">Inspire's Impact Score measures how well a company's conduct lines up with Biblical values — so the screening behind your portfolio is transparent and consistent, not a guess.</p>
+      <p class="mt-s">Get practical, Biblical insight to help align your investments with your values, and see exactly how holdings are evaluated.</p>
+      <div class="mt" style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="https://www.inspireinvesting.com/whitepaper/inside-the-inspire-impact-score" target="_blank" rel="noopener" class="btn btn-primary">Read the Impact Score whitepaper <span class="arr">↗</span></a>
+        <a href="my-story.html" class="btn btn-ghost">My journey with BRI</a>
+      </div>
+    </div>
+    <div class="ph tall"><span class="ph-tag">Image — Inspire Impact Score</span></div>
+  </div>
+</section>
 
-<div id="mntl-coverage">
-
-  <!-- ===== header bar ===== -->
-  <div class="cov-bar">
-    <div class="who">
-      <span class="ring">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
-      </span>
+<!-- BRI MODEL CTA -->
+<section class="section bg-ink">
+  <div class="wrap">
+    <div class="split" style="align-items:center">
       <div>
-        <div class="nm">Catherine</div>
-        <span class="verified">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          Coverage verified
-        </span>
+        <span class="eyebrow">The BRI model</span>
+        <h2 class="mt-s" style="color:var(--cream)">Faith-aligned, and still actively managed</h2>
+        <p class="lead mt-s" style="color:var(--ink-soft)">The BRI model is a flexible portfolio that invests only in stocks, ETFs, and funds approved by Inspire. Like every Horizon model, it can move to cash or safer investments when markets turn — values and discipline, together.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+        <a href="contact.html#open" class="btn btn-gold">Open a BRI account <span class="arr">→</span></a>
+        <a href="why-trust-us.html#models" class="textlink">Compare all four models →</a>
       </div>
     </div>
-
-    <div class="field">
-      <div class="lab">Insurer</div>
-      <div class="val">Blue Horizon Health <span class="sub">Blue Horizon PPO</span></div>
-    </div>
-
-    <div class="field">
-      <div class="lab">Member ID</div>
-      <div class="val">&bull;&bull;&bull;&bull; 4821</div>
-    </div>
-
-    <button class="upd">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v6h6"/><path d="M20 20v-6h-6"/><path d="M5.5 9a8 8 0 0 1 13-2.5L20 8M18.5 15a8 8 0 0 1-13 2.5L4 16"/></svg>
-      Update
-    </button>
   </div>
+</section>
 
-  <!-- ===== two columns ===== -->
-  <div class="cov-grid">
-
-    <!-- insurance card -->
-    <div class="panel">
-      <h4>Insurance card</h4>
-
-      <div class="icard">
-        <div class="ihead">
-          <span class="dots"><i></i><i></i><i></i></span>
-          <span class="brand">Blue Horizon</span>
-          <span class="tier">PPO</span>
-        </div>
-        <div class="ibody">
-          <div class="cgrid">
-            <div class="ci"><div class="k">Member Name</div><div class="v">Catherine</div></div>
-            <div class="ci"><div class="k">Plan</div><div class="v">Blue Horizon PPO</div></div>
-            <div class="ci"><div class="k">Member ID</div><div class="v">&bull;&bull;&bull;&bull; 4821</div></div>
-            <div class="ci"><div class="k">Effective Date</div><div class="v">Jan 1, 2025</div></div>
-            <div class="ci"><div class="k">Group Number</div><div class="v">7654</div></div>
-          </div>
-        </div>
-      </div>
-
-      <a class="viewfull" href="#">
-        View full card
-        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>
-      </a>
+<section class="contact-band" id="contact">
+  <div class="contact-inner">
+    <div>
+      <span class="eyebrow">Contact us</span>
+      <h2 class="mt-s">Want your portfolio to reflect your faith?</h2>
+      <p class="lead mt-s">We'll walk you through how the BRI model works and whether it's the right fit for your goals.</p>
+      <a href="contact.html" class="btn btn-primary mt">Get in touch <span class="arr">→</span></a>
     </div>
-
-    <!-- benefits -->
-    <div class="panel">
-      <h4>Benefits</h4>
-
-      <div class="ben">
-        <div class="top">
-          <span class="blab">Deductible progress</span>
-          <span class="met">17% met</span>
-        </div>
-        <div class="amt">$250 of $1,500</div>
-        <div class="bar"><span style="width:17%"></span></div>
-      </div>
-
-      <div class="ben">
-        <div class="top">
-          <span class="blab">Out-of-pocket progress</span>
-          <span class="met">28% met</span>
-        </div>
-        <div class="amt">$850 of $3,000</div>
-        <div class="bar"><span style="width:28%"></span></div>
-      </div>
-
-      <div class="ben pa">
-        <div class="top">
-          <div class="pmeta">
-            <span class="blab">Prior authorization</span>
-            <div class="amt">Not required</div>
-          </div>
-          <span class="check">
-            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          </span>
-        </div>
-      </div>
-
-    </div>
-
+    <ul class="contact-list">
+      <li><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6.5 12 13l9-6.5M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.6"/></svg></span><span><b>Email</b><span>hello@horizonwealth.com</span></span></li>
+      <li><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 5 5L19 18l-1 3a14 14 0 0 1-13-13z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span><b>Phone</b><span>(000) 000-0000</span></span></li>
+      <li><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></span><span><b>Office</b><span>City, State</span></span></li>
+    </ul>
   </div>
-</div>
+</section>
+
+<footer class="footer">
+  <div class="footer-top">
+    <div>
+      <a class="brand" href="index.html"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="11.5" r="6" fill="#E3AC46"/><line x1="2" y1="18" x2="24" y2="18" stroke="#6E9C8F" stroke-width="1.7"/></svg>HORIZON</a>
+      <p>An independent, fee-only fiduciary actively managing IRAs and taxable accounts since 1990.</p>
+    </div>
+    <div><h4>Explore</h4><ul><li><a href="why-trust-us.html">Why Trust Us</a></li><li><a href="about.html">About Us</a></li><li><a href="bri-investing.html">BRI Investing</a></li><li><a href="my-story.html">My Story</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+    <div><h4>Get started</h4><ul><li><a href="contact.html#open">Open an account</a></li><li><a href="contact.html">Contact us</a></li><li><a href="blog.html#signup">Newsletter</a></li></ul></div>
+  </div>
+  <div class="disclaimer">
+    <p>Horizon is a registered investment adviser. Advisory services are provided only to clients pursuant to an advisory agreement. Inspire and the Inspire Impact Score are referenced for informational purposes; Horizon is not affiliated with Inspire unless stated. This website is for informational purposes only and does not constitute investment, tax, or legal advice.</p>
+    <p>Investing involves risk, including the possible loss of principal. Past performance is not indicative of future results. Screening for biblically responsible criteria may affect available investments and performance.</p>
+    <div class="row"><span>© 1990–2026 Horizon. All rights reserved.</span><span>Custodian: Interactive Brokers · Form ADV available on request</span></div>
+  </div>
+</footer>
+
+</body>
+</html>
