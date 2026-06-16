@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #E8EBEF; padding: 40px 20px; }
+.opt-label { max-width:1080px; margin:0 auto 14px; display:flex; align-items:center; gap:12px; }
+.opt-num { background:#0F2A3F; color:#5EEAD4; font-weight:700; font-size:13px; width:30px; height:30px; border-radius:7px; display:flex; align-items:center; justify-content:center; }
+.opt-name { font-size:15px; font-weight:700; color:#0F2A3F; }
+.opt-note { font-size:13px; color:#64748B; }
+.wrap { max-width:1080px; margin:0 auto 56px; background:#fff; border-radius:16px; padding:60px 56px 72px; box-shadow:0 2px 12px rgba(15,42,63,0.06); }
+.eyebrow { font-size:10px; font-weight:700; color:#2C8DD7; text-transform:uppercase; letter-spacing:2px; margin-bottom:14px; }
+.title { font-size:34px; font-weight:700; color:#0F2A3F; letter-spacing:-0.8px; line-height:1.1; margin-bottom:18px; }
+.title span { color:#14B8A6; }
+.grid { display:grid; grid-template-columns:1.05fr 1fr; gap:52px; align-items:center; }
+.sub { font-size:16px; color:#64748B; line-height:1.65; margin-bottom:26px; }
+.sub strong { color:#0F2A3F; font-weight:600; }
+.metric { display:flex; align-items:baseline; gap:12px; margin-bottom:14px; }
+.metric-big { font-size:28px; font-weight:800; color:#1E3A8A; letter-spacing:-0.5px; }
+.metric-lbl { font-size:14px; color:#64748B; }
+
+/* photo frame — badge overlaps bottom edge */
+.photo-frame { position:relative; padding-bottom:48px; }
+.photo { position:relative; border-radius:16px; overflow:hidden; aspect-ratio:4/5; }
+.badge { position:absolute; bottom:0; left:24px; right:24px; background:#fff; border-radius:12px; padding:18px 20px; box-shadow:0 16px 40px rgba(15,42,63,0.18); }
+.badge-top { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.badge-dot { width:8px; height:8px; border-radius:50%; background:#14B8A6; }
+.badge-label { font-size:10px; font-weight:700; color:#14B8A6; text-transform:uppercase; letter-spacing:1px; }
+.badge-text { font-size:14px; color:#0F2A3F; font-weight:600; line-height:1.4; }
+.badge-person { display:flex; align-items:center; gap:12px; }
+.badge-avatar { width:44px; height:44px; border-radius:50%; flex-shrink:0; object-fit:cover; background:#CBD5E1; }
+.badge-name { font-size:14px; font-weight:700; color:#0F2A3F; }
+.badge-role { font-size:11px; color:#94A3B8; margin-top:1px; }
+
+/* scene placeholders representing different photo types */
+.scene { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.scene-a { background:linear-gradient(135deg,#475569,#1E293B); }
+.scene-b { background:linear-gradient(135deg,#1E3A8A,#0F2A3F); }
+.scene-c { background:linear-gradient(160deg,#64748B,#334155); }
+.scene-d { background:linear-gradient(135deg,#0E7490,#0F2A3F); }
+.scene svg { opacity:0.35; }
+.scene-tag { position:absolute; top:16px; left:16px; background:rgba(255,255,255,0.9); font-size:10px; font-weight:700; color:#0F2A3F; padding:5px 11px; border-radius:6px; letter-spacing:0.3px; }
+</style>
+</head>
+<body>
+
+<!-- 2A: PERSON AT FACILITY -->
+<div class="opt-label"><div class="opt-num">2A</div><div><div class="opt-name">Energy manager at the plant</div><div class="opt-note">A real person on the facility floor or at their workstation. Badge has their name + face.</div></div></div>
+<div class="wrap">
+  <div class="grid">
+    <div>
+      <div class="eyebrow">A real example</div>
+      <h2 class="title">Six weeks of work.<br><span>Now it just shows up.</span></h2>
+      <p class="sub">Robert preps an ISO 50001 energy audit every quarter — weeks of pulling data from meters, spreadsheets, and utility bills by hand. We connected his sensors. <strong>Now it runs automatically.</strong></p>
+      <div class="metric"><span class="metric-big">6 weeks</span><span class="metric-lbl">→ 30 seconds, on a schedule</span></div>
+      <div class="metric"><span class="metric-big">Zero</span><span class="metric-lbl">new behaviors required</span></div>
+    </div>
+    <div class="photo-frame">
+      <div class="photo">
+        <div class="scene scene-a">
+          <span class="scene-tag">PHOTO: person at facility</span>
+          <svg viewBox="0 0 24 24" width="90" height="90" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="badge-person">
+          <div class="badge-avatar"></div>
+          <div>
+            <div class="badge-name">Robert M.</div>
+            <div class="badge-role">Energy Coordinator · Manufacturing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2B: FACTORY EXTERIOR/INTERIOR -->
+<div class="opt-label"><div class="opt-num">2B</div><div><div class="opt-name">The facility itself</div><div class="opt-note">Industrial plant floor or rooftop HVAC. Badge shows the deliverable, no face needed.</div></div></div>
+<div class="wrap">
+  <div class="grid">
+    <div>
+      <div class="eyebrow">A real example</div>
+      <h2 class="title">Six weeks of work.<br><span>Now it just shows up.</span></h2>
+      <p class="sub">An ISO 50001 energy audit used to mean weeks of pulling data from meters, spreadsheets, and utility bills by hand. We connected the plant's sensors. <strong>Now the report runs on a schedule.</strong></p>
+      <div class="metric"><span class="metric-big">6 weeks</span><span class="metric-lbl">→ 30 seconds, on a schedule</span></div>
+      <div class="metric"><span class="metric-big">Zero</span><span class="metric-lbl">new behaviors required</span></div>
+    </div>
+    <div class="photo-frame">
+      <div class="photo">
+        <div class="scene scene-c">
+          <span class="scene-tag">PHOTO: plant floor / rooftop units</span>
+          <svg viewBox="0 0 24 24" width="90" height="90" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1"><path d="M3 21h18M4 21V8l5-3v16M14 21V5l6 3v13M8 10v0M8 14v0M17 11v0M17 15v0"/></svg>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="badge-top"><span class="badge-dot"></span><span class="badge-label">Auto-generated · on schedule</span></div>
+        <div class="badge-text">ISO 50001 compliance report → delivered to the energy team, audit-ready</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2C: PERSON + DELIVERABLE BADGE COMBO -->
+<div class="opt-label"><div class="opt-num">2C</div><div><div class="opt-name">Person photo + deliverable badge</div><div class="opt-note">Face in the photo, but the badge shows what gets delivered (not the name). Best of both.</div></div></div>
+<div class="wrap">
+  <div class="grid">
+    <div>
+      <div class="eyebrow">A real example</div>
+      <h2 class="title">Six weeks of work.<br><span>Now it just shows up.</span></h2>
+      <p class="sub">Robert preps an ISO 50001 audit every quarter. We connected his sensors — now the whole thing runs on a schedule and lands in his inbox. <strong>He didn't change a thing about how he works.</strong></p>
+      <div class="metric"><span class="metric-big">90%</span><span class="metric-lbl">less time on every audit cycle</span></div>
+    </div>
+    <div class="photo-frame">
+      <div class="photo">
+        <div class="scene scene-b">
+          <span class="scene-tag">PHOTO: person reviewing report</span>
+          <svg viewBox="0 0 24 24" width="90" height="90" fill="none" stroke="rgba(94,234,212,0.45)" stroke-width="1"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="badge-top"><span class="badge-dot"></span><span class="badge-label">Lands in his inbox · automatically</span></div>
+        <div class="badge-text">ISO 50001 report, EnPI calcs, SEU register — audit-ready</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
