@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>myDevices — Operational Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #F7F9FB; color: #1A1A1A; overflow-x: hidden; }
+
+/* ── TOKENS ── */
+:root {
+  --navy: #0F2A3F;
+  --navy2: #1E3A8A;
+  --teal: #14B8A6;
+  --teal2: #5EEAD4;
+  --ice: #CADCFC;
+  --slate: #64748B;
+  --mid: #94A3B8;
+  --border: #E8EBEF;
+  --light: #F7F9FB;
+  --white: #FFFFFF;
+  --red: #DC2626;
+  --amber: #D97706;
+  --green: #059669;
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 48px; height: 60px; gap: 32px;
+}
+.nav-logo { font-size: 16px; font-weight: 700; color: var(--navy); letter-spacing: -0.3px; text-decoration: none; }
+.nav-logo em { font-style: italic; }
+.nav-links { display: flex; gap: 24px; }
+.nav-link { font-size: 13px; color: var(--slate); font-weight: 500; text-decoration: none; }
+.nav-link:hover { color: var(--navy); }
+.nav-right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+.nav-signin { font-size: 13px; color: var(--slate); font-weight: 500; cursor: pointer; }
+.nav-cta { background: var(--navy2); color: var(--white); font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: 7px; border: none; cursor: pointer; font-family: inherit; }
+
+/* ── HERO ── */
+.hero { background: var(--white); padding: 60px 48px 52px; }
+.hero-top { text-align: center; max-width: 780px; margin: 0 auto 48px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 700; color: #2C8DD7; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+.eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+.hero-h1 { font-size: 48px; font-weight: 800; color: var(--navy); letter-spacing: -1.5px; line-height: 1.05; margin-bottom: 18px; }
+.hero-h1 em { font-style: normal; color: var(--teal); }
+.hero-sub { font-size: 16px; color: var(--slate); line-height: 1.7; margin-bottom: 28px; }
+.hero-sub strong { color: var(--navy); font-weight: 600; }
+.ai-inline { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--navy); vertical-align: middle; position: relative; top: -1px; }
+.ai-inline svg { width: 15px; height: 15px; }
+.hero-actions { display: flex; gap: 12px; justify-content: center; }
+.btn-primary { background: var(--navy2); color: var(--white); font-size: 14px; font-weight: 600; padding: 13px 28px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; }
+.btn-secondary { background: var(--white); color: var(--navy); font-size: 14px; font-weight: 500; padding: 13px 28px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; font-family: inherit; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-secondary:hover { border-color: var(--navy2); }
+
+/* ── FLOW DIAGRAM ── */
+.flow-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 28px 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.flow-col-heads {
+  display: grid;
+  grid-template-columns: 1fr 44px 180px 44px 1fr;
+  margin-bottom: 14px;
+}
+.flow-col-head { font-size: 9px; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: 1.4px; text-align: center; }
+.flow-grid { display: grid; grid-template-columns: 1fr 44px 180px 44px 1fr; align-items: center; }
+.flow-col { display: flex; flex-direction: column; gap: 8px; }
+
+.src-chip { display: flex; align-items: center; gap: 10px; background: var(--light); border: 0.5px solid var(--border); border-radius: 9px; padding: 10px 14px; }
+.src-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.src-icon svg { width: 14px; height: 14px; }
+.src-name { font-size: 12.5px; font-weight: 600; color: var(--navy); line-height: 1.2; }
+.src-sub { font-size: 9.5px; color: var(--mid); display: block; margin-top: 1px; }
+
+.arrows { display: flex; flex-direction: column; gap: 16px; align-items: center; padding: 0 6px; }
+.arr { width: 100%; height: 1.5px; background: var(--border); position: relative; }
+.arr::after { content: ''; position: absolute; right: -1px; top: -3.5px; border-left: 7px solid var(--border); border-top: 4.5px solid transparent; border-bottom: 4.5px solid transparent; }
+
+.mid-box { background: var(--navy); border-radius: 14px; padding: 24px 16px 20px; text-align: center; border: 1.5px solid var(--teal); }
+.mid-logo { font-size: 18px; font-weight: 800; color: var(--white); letter-spacing: -0.4px; }
+.mid-logo em { font-style: italic; font-weight: 700; }
+.mid-divider { width: 36px; height: 1px; background: rgba(94,234,212,0.3); margin: 12px auto; }
+.mid-point { font-size: 10px; color: rgba(202,220,252,0.8); line-height: 2; }
+
+.ai-chip { display: flex; align-items: center; gap: 10px; background: var(--white); border: 0.5px solid var(--border); border-radius: 9px; padding: 9px 13px; }
+.ai-chip.live { border-color: #A7F3D0; background: #F7FEFB; }
+.ai-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ai-icon svg { width: 20px; height: 20px; }
+.ai-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+.ai-maker { font-size: 9.5px; color: var(--mid); display: block; margin-top: 1px; }
+.ai-tag { margin-left: auto; font-size: 8px; font-weight: 800; display: flex; align-items: center; gap: 3px; }
+.ai-tag.live { color: var(--green); }
+.ai-tag.live::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #10B981; }
+.ai-tag.soon { color: #CBD5E1; }
+
+.flow-footer { margin-top: 20px; padding-top: 18px; border-top: 0.5px solid var(--border); text-align: center; font-size: 12px; color: var(--mid); }
+.flow-footer strong { color: var(--navy); font-weight: 600; }
+
+/* ── LOGO STRIP ── */
+.logos { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 22px 48px; display: flex; align-items: center; gap: 24px; }
+.logos-lbl { font-size: 9px; font-weight: 700; color: #CBD5E1; text-transform: uppercase; letter-spacing: 1.2px; white-space: nowrap; }
+.logos-row { display: flex; gap: 36px; align-items: center; flex-wrap: wrap; }
+.logo-item { font-size: 14px; font-weight: 700; color: #D1D5DB; }
+
+/* ── SECTION WRAPPER ── */
+.section { padding: 80px 48px; }
+.section.gray { background: var(--light); }
+.section.white { background: var(--white); }
+.section.dark { background: var(--navy); }
+.section-inner { max-width: 1080px; margin: 0 auto; }
+.section-eyebrow { font-size: 10px; font-weight: 700; color: #2C8DD7; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+.section-eyebrow.light { color: var(--teal2); }
+.section-title { font-size: 36px; font-weight: 700; color: var(--navy); letter-spacing: -0.8px; line-height: 1.1; margin-bottom: 14px; }
+.section-title.white { color: var(--white); }
+.section-title span { color: var(--teal); }
+.section-title strong { color: var(--navy2); }
+.section-sub { font-size: 16px; color: var(--slate); line-height: 1.65; max-width: 680px; margin-bottom: 48px; }
+.section-sub.light { color: rgba(202,220,252,0.75); }
+
+/* ── DORIAN STORY ── */
+.story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.story-quote { background: #F0F6FF; border: 1px solid var(--ice); border-left: 4px solid var(--navy2); border-radius: 0 12px 12px 0; padding: 28px 32px; margin-bottom: 28px; }
+.story-quote p { font-size: 16px; color: var(--navy); line-height: 1.7; font-style: italic; }
+.story-attr { font-size: 12px; color: var(--slate); margin-top: 12px; font-style: normal; font-weight: 500; }
+.story-body p { font-size: 16px; color: var(--slate); line-height: 1.7; margin-bottom: 16px; }
+.story-body p strong { color: var(--navy); font-weight: 600; }
+.story-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 32px; }
+.story-stat { background: var(--light); border: 1px solid var(--border); border-radius: 10px; padding: 20px 16px; text-align: center; }
+.story-stat-num { font-size: 26px; font-weight: 800; color: var(--navy2); letter-spacing: -0.5px; }
+.story-stat-lbl { font-size: 11px; color: var(--slate); margin-top: 5px; line-height: 1.4; }
+
+/* ── PROBLEM COMPARE ── */
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 860px; margin: 0 auto; }
+.compare-card { border-radius: 14px; padding: 36px 32px; }
+.compare-light { background: var(--white); border: 1px solid var(--border); }
+.compare-dark { background: linear-gradient(135deg, var(--navy2), var(--navy)); }
+.compare-label { font-size: 13px; font-weight: 700; margin-bottom: 22px; }
+.compare-light .compare-label { color: var(--navy); }
+.compare-dark .compare-label { color: var(--white); }
+.compare-list { list-style: none; display: flex; flex-direction: column; gap: 0; }
+.compare-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; font-size: 15px; font-weight: 500; border-bottom: 1px solid; }
+.compare-light .compare-item { color: #475569; border-color: var(--border); }
+.compare-dark .compare-item { color: var(--white); border-color: rgba(255,255,255,0.1); }
+.compare-item:last-child { border-bottom: none; }
+.ci { font-size: 16px; flex-shrink: 0; }
+
+/* ── ASK ONCE / IN YOUR TOOLS ── */
+.tools-grid { display: grid; grid-template-columns: 320px 1fr; gap: 44px; align-items: center; }
+.tools-hl { font-size: 38px; font-weight: 700; color: var(--navy); letter-spacing: -0.8px; line-height: 1.1; margin-bottom: 14px; }
+.tools-hl .rotating-word { color: var(--teal); transition: all 0.4s ease; }
+.tools-sub { font-size: 15px; color: var(--slate); line-height: 1.65; margin-bottom: 28px; }
+.tools-menu { display: flex; flex-direction: column; gap: 6px; }
+.tool-item { display: flex; align-items: center; gap: 12px; padding: 13px 15px; border-radius: 10px; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; }
+.tool-item:hover { background: var(--white); }
+.tool-item.active { background: var(--white); border-color: #D6E4F7; box-shadow: 0 4px 16px rgba(30,58,138,0.08); }
+.tool-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--white); border: 0.5px solid var(--border); }
+.tool-icon svg { width: 22px; height: 22px; }
+.tool-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+.tool-desc { font-size: 11px; color: var(--mid); margin-top: 1px; }
+.tools-stage { position: relative; min-height: 480px; display: flex; align-items: center; }
+.tool-slide { position: absolute; inset: 0; opacity: 0; transform: translateY(12px); transition: all 0.4s ease; pointer-events: none; display: flex; flex-direction: column; justify-content: center; }
+.tool-slide.active { opacity: 1; transform: translateY(0); pointer-events: all; position: relative; }
+.tool-shot { width: 100%; border-radius: 12px; box-shadow: 0 20px 56px rgba(15,42,63,0.14); border: 0.5px solid var(--border); display: block; background: var(--white); overflow: hidden; }
+.tool-prompt { text-align: center; margin-top: 13px; font-size: 12px; color: var(--mid); font-style: italic; }
+
+/* APP CHROME — Slack */
+.slack-wrap { border-radius: 12px; overflow: hidden; border: 1px solid #DDD; }
+.slack-bar { background: #3F0E40; padding: 10px 16px; display: flex; align-items: center; gap: 8px; }
+.slack-bar-title { color: #fff; font-size: 13px; font-weight: 700; }
+.slack-bar-sub { color: rgba(255,255,255,0.5); font-size: 11px; }
+.slack-chan { padding: 10px 18px; border-bottom: 1px solid #F0F0F0; font-size: 14px; font-weight: 700; color: #1D1C1D; background: #fff; }
+.slack-chan span { color: #616061; font-weight: 400; font-size: 12px; margin-left: 6px; }
+.slack-body { background: #fff; padding: 14px 18px 18px; }
+.slack-msg { display: flex; gap: 9px; }
+.slack-av { width: 34px; height: 34px; border-radius: 7px; background: linear-gradient(135deg,#1E3A8A,#0F2A3F); display: flex; align-items: center; justify-content: center; color: #5EEAD4; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+.slack-head { display: flex; align-items: baseline; gap: 7px; margin-bottom: 4px; }
+.slack-sender { font-size: 14px; font-weight: 800; color: #1D1C1D; }
+.slack-app-badge { font-size: 9px; background: #E8E8E8; color: #616061; padding: 1px 5px; border-radius: 3px; font-weight: 600; }
+.slack-time { font-size: 11px; color: #616061; }
+.slack-text { font-size: 13px; color: #1D1C1D; line-height: 1.45; margin-bottom: 8px; }
+.slack-attach { border-left: 4px solid #DC2626; background: #F8F8F8; border-radius: 0 7px 7px 0; padding: 12px 14px; }
+.slack-attach-title { font-size: 13px; font-weight: 700; color: #1D1C1D; margin-bottom: 7px; }
+.slack-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; margin-bottom: 10px; }
+.slack-field-label { font-size: 11px; font-weight: 700; color: #616061; }
+.slack-field-val { font-size: 12px; color: #1D1C1D; }
+.slack-field-val.red { color: #DC2626; font-weight: 700; }
+.slack-cause { font-size: 11.5px; color: #1D1C1D; line-height: 1.5; margin-bottom: 10px; }
+.slack-btns { display: flex; gap: 7px; }
+.slack-btn { font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 5px; border: 1px solid #BBB; color: #1D1C1D; background: #fff; }
+.slack-btn.green { background: #007A5A; border-color: #007A5A; color: #fff; }
+
+/* APP CHROME — Excel */
+.excel-wrap { border-radius: 10px; overflow: hidden; border: 1px solid #CCC; }
+.excel-bar { background: #107C41; color: #fff; padding: 8px 14px; font-size: 12px; font-weight: 600; }
+.excel-ribbon { background: #F3F2F1; border-bottom: 1px solid #E1DFDD; padding: 5px 14px; display: flex; gap: 16px; font-size: 11px; color: #444; }
+.excel-ribbon .active { color: #107C41; font-weight: 700; border-bottom: 2px solid #107C41; padding-bottom: 3px; }
+.excel-formula { background: #fff; border-bottom: 1px solid #E1DFDD; padding: 4px 14px; display: flex; gap: 10px; font-size: 11px; color: #666; }
+.excel-cellref { background: #F3F2F1; border: 1px solid #D1D1D1; padding: 1px 8px; font-size: 10px; border-radius: 2px; }
+.excel-table { width: 100%; border-collapse: collapse; font-size: 11px; background: #fff; }
+.excel-table th { background: #F3F2F1; border: 1px solid #D8D8D8; font-weight: 400; color: #666; font-size: 10px; padding: 3px 8px; }
+.excel-table td { border: 1px solid #E8E8E8; padding: 5px 9px; color: #222; }
+.excel-table .hdr td { background: #0F2A3F; color: #fff; font-weight: 700; font-size: 11px; }
+.excel-table .red { color: #C00000; font-weight: 700; }
+.excel-table .amb { color: #BF8F00; font-weight: 700; }
+.excel-table .grn { color: #107C41; }
+.excel-table .right { text-align: right; }
+.excel-table .rn { background: #F3F2F1; color: #666; text-align: center; font-size: 10px; width: 24px; }
+.excel-tabs { background: #F3F2F1; border-top: 1px solid #E1DFDD; padding: 3px 14px; display: flex; gap: 2px; font-size: 11px; }
+.excel-tab { padding: 3px 12px; color: #444; }
+.excel-tab.active { background: #fff; border: 1px solid #D8D8D8; border-bottom: none; color: #107C41; font-weight: 700; border-radius: 3px 3px 0 0; }
+
+/* APP CHROME — Teams */
+.teams-wrap { border-radius: 10px; overflow: hidden; border: 1px solid #CCC; }
+.teams-bar { background: #464775; padding: 10px 16px; font-size: 13px; font-weight: 600; color: #fff; }
+.teams-tabs { background: #fff; padding: 8px 18px 0; display: flex; gap: 22px; border-bottom: 1px solid #E1E1E1; }
+.teams-tab { font-size: 12px; color: #616161; padding-bottom: 9px; }
+.teams-tab.active { color: #5B5FC7; font-weight: 700; border-bottom: 2.5px solid #5B5FC7; }
+.teams-body { padding: 16px; background: #F5F5F5; }
+.teams-msg { background: #fff; border-radius: 8px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+.teams-msg-head { display: flex; gap: 9px; align-items: center; margin-bottom: 9px; }
+.teams-av { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg,#1E3A8A,#0F2A3F); display: flex; align-items: center; justify-content: center; color: #5EEAD4; font-weight: 800; font-size: 12px; }
+.teams-name { font-size: 13px; font-weight: 700; color: #242424; }
+.teams-time { font-size: 11px; color: #616161; }
+.teams-card { border: 1px solid #E1E1E1; border-radius: 7px; overflow: hidden; margin-top: 6px; }
+.teams-card-strip { height: 4px; background: #D92C2C; }
+.teams-card-body { padding: 14px 16px; }
+.teams-card-title { font-size: 15px; font-weight: 700; color: #242424; margin-bottom: 3px; }
+.teams-card-sub { font-size: 11px; color: #616161; margin-bottom: 12px; }
+.teams-facts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.teams-fact { background: #F5F5F5; border-radius: 5px; padding: 9px 10px; }
+.teams-fact-label { font-size: 9px; font-weight: 700; color: #616161; text-transform: uppercase; }
+.teams-fact-val { font-size: 16px; font-weight: 700; color: #242424; margin-top: 2px; }
+.teams-fact-val.red { color: #D92C2C; }
+.teams-card-text { font-size: 12px; color: #424242; margin-bottom: 12px; line-height: 1.5; }
+.teams-btns { display: flex; gap: 7px; }
+.teams-btn { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 4px; border: 1px solid #D1D1D1; color: #242424; background: #fff; }
+.teams-btn.primary { background: #5B5FC7; border-color: #5B5FC7; color: #fff; }
+
+/* APP CHROME — PowerPoint */
+.ppt-wrap { border-radius: 10px; overflow: hidden; border: 1px solid #CCC; }
+.ppt-bar { background: #B7472A; color: #fff; padding: 8px 14px; font-size: 12px; font-weight: 600; }
+.ppt-ribbon { background: #F3F2F1; border-bottom: 1px solid #E1DFDD; padding: 5px 14px; display: flex; gap: 16px; font-size: 11px; color: #444; }
+.ppt-ribbon .active { color: #B7472A; font-weight: 700; border-bottom: 2px solid #B7472A; padding-bottom: 3px; }
+.ppt-main { display: grid; grid-template-columns: 110px 1fr; }
+.ppt-thumbs { background: #F3F2F1; border-right: 1px solid #E1DFDD; padding: 10px 8px 10px 18px; display: flex; flex-direction: column; gap: 8px; }
+.ppt-thumb { background: #fff; border: 1px solid #D8D8D8; border-radius: 3px; aspect-ratio: 16/9; position: relative; font-size: 5px; color: #999; padding: 4px; }
+.ppt-thumb.active { outline: 2px solid #B7472A; outline-offset: 1px; }
+.ppt-thumb-n { position: absolute; left: -14px; top: 0; font-size: 8px; color: #666; }
+.ppt-thumb-bar { height: 2px; background: #D9E2EC; border-radius: 1px; margin-bottom: 2px; }
+.ppt-thumb-bar.navy { background: #0F2A3F; }
+.ppt-stage { padding: 20px; background: #E8E6E4; display: flex; align-items: center; justify-content: center; }
+.ppt-slide { background: linear-gradient(150deg, #0F2A3F, #1A3550); width: 100%; aspect-ratio: 16/9; box-shadow: 0 4px 16px rgba(0,0,0,0.18); padding: 28px 36px; color: #fff; position: relative; overflow: hidden; }
+.ppt-eyebrow { font-size: 9px; font-weight: 700; color: #5EEAD4; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 7px; }
+.ppt-title { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; }
+.ppt-sub { font-size: 9.5px; color: #94A3B8; margin-bottom: 16px; }
+.ppt-kpis { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+.ppt-kpi { background: rgba(255,255,255,0.06); border: 1px solid rgba(94,234,212,0.15); border-radius: 8px; padding: 10px 12px; }
+.ppt-kpi-num { font-size: 20px; font-weight: 700; line-height: 1; }
+.ppt-kpi-lbl { font-size: 8px; color: #94A3B8; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.ppt-chart-row { display: grid; grid-template-columns: 1.6fr 1fr; gap: 10px; }
+.ppt-chart { background: rgba(255,255,255,0.04); border: 1px solid rgba(94,234,212,0.12); border-radius: 8px; padding: 12px; }
+.ppt-chart-title { font-size: 9px; font-weight: 700; color: #CADCFC; margin-bottom: 6px; }
+.ppt-bars { display: flex; align-items: flex-end; gap: 3px; height: 60px; }
+.ppt-bar { flex: 1; border-radius: 2px 2px 0 0; }
+.ppt-insight { background: rgba(94,234,212,0.08); border: 1px solid rgba(94,234,212,0.25); border-radius: 8px; padding: 12px; }
+.ppt-insight-title { font-size: 8px; font-weight: 700; color: #5EEAD4; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+.ppt-insight-text { font-size: 10px; line-height: 1.55; color: #E2E8F0; }
+
+/* ── ACTIONS / OUTCOMES ── */
+.outcomes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.outcome-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 32px 28px; border-top: 4px solid; }
+.outcome-num { font-size: 36px; font-weight: 800; line-height: 1; margin-bottom: 12px; }
+.outcome-title { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+.outcome-body { font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 20px; }
+.outcome-flow { display: flex; align-items: center; gap: 6px; margin-top: auto; }
+.outcome-flow-item { font-size: 11px; font-weight: 600; color: var(--mid); background: var(--light); padding: 4px 10px; border-radius: 5px; }
+.outcome-flow-arrow { color: var(--mid); font-size: 12px; }
+
+/* ── USE CASES ── */
+.uc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.uc-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 24px 22px; border-left: 4px solid; transition: transform 0.2s, box-shadow 0.2s; cursor: default; }
+.uc-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(15,42,63,0.08); }
+.uc-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.uc-body { font-size: 13px; color: var(--slate); line-height: 1.55; }
+.uc-outcome { font-size: 11.5px; font-weight: 600; color: var(--navy2); margin-top: 12px; }
+
+/* ── IOT ANALYTICS ── */
+.quote-block { background: #F0F6FF; border: 1px solid var(--ice); border-left: 4px solid var(--navy2); border-radius: 0 12px 12px 0; padding: 28px 32px; margin-bottom: 36px; max-width: 900px; margin-left: auto; margin-right: auto; }
+.quote-text { font-size: 17px; color: var(--navy); line-height: 1.65; font-style: italic; margin-bottom: 10px; }
+.quote-attr { font-size: 12px; color: var(--slate); font-weight: 500; font-style: normal; }
+.quote-attr strong { color: var(--navy2); }
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 28px 22px; text-align: center; }
+.stat-num { font-size: 44px; font-weight: 800; color: var(--navy2); letter-spacing: -1px; line-height: 1; margin-bottom: 10px; }
+.stat-label { font-size: 13px; color: var(--slate); line-height: 1.45; margin-bottom: 7px; }
+.stat-sub { font-size: 11px; color: var(--mid); font-style: italic; line-height: 1.4; }
+
+/* ── PROOF ── */
+.proof-logos { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 48px; }
+.proof-logo-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px; text-align: center; }
+.proof-logo-name { font-size: 15px; font-weight: 700; color: rgba(202,220,252,0.7); }
+.proof-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; overflow: hidden; }
+.proof-stat { padding: 28px 20px; text-align: center; border-right: 1px solid rgba(255,255,255,0.08); }
+.proof-stat:last-child { border-right: none; }
+.proof-stat-num { font-size: 34px; font-weight: 800; color: var(--teal2); letter-spacing: -0.8px; line-height: 1; margin-bottom: 8px; }
+.proof-stat-lbl { font-size: 11px; color: rgba(202,220,252,0.55); line-height: 1.4; }
+
+/* ── CTA ── */
+.cta-section { background: linear-gradient(135deg, var(--navy), var(--navy2)); padding: 80px 48px; text-align: center; }
+.cta-h { font-size: 42px; font-weight: 800; color: var(--white); letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px; }
+.cta-h strong { color: var(--teal2); }
+.cta-sub { font-size: 16px; color: rgba(202,220,252,0.7); margin-bottom: 32px; line-height: 1.6; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; }
+.cta-btn-p { background: var(--white); color: var(--navy); font-size: 14px; font-weight: 700; padding: 14px 32px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; }
+.cta-btn-s { background: transparent; color: var(--white); font-size: 14px; font-weight: 500; padding: 14px 32px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; font-family: inherit; }
+
+/* ── FOOTER ── */
+footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.06); padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; }
+.footer-logo { font-size: 15px; font-weight: 700; color: var(--white); }
+.footer-logo em { font-style: italic; }
+.footer-links { display: flex; gap: 24px; }
+.footer-link { font-size: 12px; color: rgba(202,220,252,0.4); }
+.footer-note { font-size: 11px; color: rgba(202,220,252,0.3); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo"><em>my</em>Devices</a>
+  <div class="nav-links">
+    <a href="#" class="nav-link">Platform</a>
+    <a href="#" class="nav-link">Use Cases</a>
+    <a href="#" class="nav-link">Pricing</a>
+    <a href="#" class="nav-link">Docs</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-signin">Sign in</span>
+    <button class="nav-cta">Book a Demo</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-top">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>Operational intelligence platform</div>
+    <h1 class="hero-h1">Any sensor. Any machine.<br><em>Any AI.</em></h1>
+    <p class="hero-sub">
+      myDevices connects your sensors, equipment, and building systems directly to
+      <span class="ai-inline"><svg viewBox="0 0 24 24"><path d="M12 2C9.5 7.5 7.5 9.5 2 12c5.5 2.5 7.5 4.5 10 10 2.5-5.5 4.5-7.5 10-10-5.5-2.5-7.5-4.5-10-10z" fill="#D97757"/></svg>Claude</span>,
+      <span class="ai-inline"><svg viewBox="0 0 24 24"><defs><linearGradient id="cp" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0078D4"/><stop offset="100%" stop-color="#9B59B6"/></linearGradient></defs><circle cx="12" cy="12" r="10" fill="url(#cp)"/><circle cx="12" cy="12" r="4.5" fill="#fff"/></svg>Copilot</span>,
+      <span class="ai-inline"><svg viewBox="0 0 41 41"><path d="M21.67 2.5C11.1 2.5 2.5 11.1 2.5 21.67c0 10.56 8.6 19.17 19.17 19.17 10.56 0 19.17-8.6 19.17-19.17C40.84 11.1 32.23 2.5 21.67 2.5zm0 6.2c5.78 2.61 9.78 8.39 9.78 15.1 0 6.7-4 12.48-9.78 15.1-5.79-2.62-9.79-8.4-9.79-15.1 0-6.71 4-12.49 9.79-15.1z" fill="#10A37F"/></svg>ChatGPT</span>
+      and <span class="ai-inline"><svg viewBox="0 0 24 24"><defs><linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4285F4"/><stop offset="100%" stop-color="#1A73E8"/></linearGradient></defs><path d="M12 2c.5 5.5 4.5 9.5 10 10-5.5.5-9.5 4.5-10 10-.5-5.5-4.5-9.5-10-10 5.5-.5 9.5-4.5 10-10z" fill="url(#gm)"/></svg>Gemini</span>
+      — and <strong>automatically turns your operational data into reports, work orders, and compliance documents.</strong>
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary">Book a Demo →</button>
+      <button class="btn-secondary">See how it works</button>
+    </div>
+  </div>
+
+  <div class="flow-card">
+    <div class="flow-col-heads">
+      <div class="flow-col-head">Your physical operations</div>
+      <div></div>
+      <div class="flow-col-head">The layer</div>
+      <div></div>
+      <div class="flow-col-head">The AI your team uses</div>
+    </div>
+    <div class="flow-grid">
+      <div class="flow-col">
+        <div class="src-chip"><div class="src-icon" style="background:#ECFDF5"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round"><path d="M2 12h4l3-9 4 18 3-9h4"/></svg></div><div><div class="src-name">Wireless sensors</div><span class="src-sub">LoRaWAN · BLE · cellular · 650+ devices</span></div></div>
+        <div class="src-chip"><div class="src-icon" style="background:#EFF6FF"><svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.2 4.2l2.8 2.8m10 10l2.8 2.8M1 12h4m14 0h4"/></svg></div><div><div class="src-name">Machines &amp; equipment</div><span class="src-sub">vibration · runtime · power · OEE</span></div></div>
+        <div class="src-chip"><div class="src-icon" style="background:#FFF7ED"><svg viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div><div class="src-name">Energy meters</div><span class="src-sub">mains · submeters · circuits · panels</span></div></div>
+        <div class="src-chip"><div class="src-icon" style="background:#F5F3FF"><svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5" stroke-linecap="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></div><div><div class="src-name">Building systems</div><span class="src-sub">HVAC · BACnet · Modbus · refrigeration</span></div></div>
+        <div class="src-chip"><div class="src-icon" style="background:#FEF2F2"><svg viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></div><div><div class="src-name">Industrial controls</div><span class="src-sub">SCADA · PLC · historians</span></div></div>
+      </div>
+      <div class="arrows"><div class="arr"></div><div class="arr"></div><div class="arr"></div><div class="arr"></div><div class="arr"></div></div>
+      <div><div class="mid-box"><div class="mid-logo"><em>my</em>Devices</div><div class="mid-divider"></div><div class="mid-point">Builds baselines</div><div class="mid-point">Scores anomalies</div><div class="mid-point">Adds business context</div></div></div>
+      <div class="arrows"><div class="arr"></div><div class="arr"></div><div class="arr"></div><div class="arr"></div><div class="arr"></div></div>
+      <div class="flow-col">
+        <div class="ai-chip live"><div class="ai-icon"><svg viewBox="0 0 24 24"><path d="M12 2C9.5 7.5 7.5 9.5 2 12c5.5 2.5 7.5 4.5 10 10 2.5-5.5 4.5-7.5 10-10-5.5-2.5-7.5-4.5-10-10z" fill="#D97757"/></svg></div><div><div class="ai-name">Claude</div><span class="ai-maker">Anthropic</span></div><span class="ai-tag live">LIVE</span></div>
+        <div class="ai-chip"><div class="ai-icon"><svg viewBox="0 0 24 24"><defs><linearGradient id="cp2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0078D4"/><stop offset="100%" stop-color="#9B59B6"/></linearGradient></defs><circle cx="12" cy="12" r="10" fill="url(#cp2)"/><circle cx="12" cy="12" r="4.5" fill="#fff"/></svg></div><div><div class="ai-name">Copilot</div><span class="ai-maker">Microsoft</span></div><span class="ai-tag soon">COMING SOON</span></div>
+        <div class="ai-chip"><div class="ai-icon"><svg viewBox="0 0 41 41"><path d="M21.67 2.5C11.1 2.5 2.5 11.1 2.5 21.67c0 10.56 8.6 19.17 19.17 19.17 10.56 0 19.17-8.6 19.17-19.17C40.84 11.1 32.23 2.5 21.67 2.5zm0 6.2c5.78 2.61 9.78 8.39 9.78 15.1 0 6.7-4 12.48-9.78 15.1-5.79-2.62-9.79-8.4-9.79-15.1 0-6.71 4-12.49 9.79-15.1z" fill="#10A37F"/></svg></div><div><div class="ai-name">ChatGPT</div><span class="ai-maker">OpenAI</span></div><span class="ai-tag soon">COMING SOON</span></div>
+        <div class="ai-chip"><div class="ai-icon"><svg viewBox="0 0 24 24"><defs><linearGradient id="gm2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4285F4"/><stop offset="100%" stop-color="#1A73E8"/></linearGradient></defs><path d="M12 2c.5 5.5 4.5 9.5 10 10-5.5.5-9.5 4.5-10 10-.5-5.5-4.5-9.5-10-10 5.5-.5 9.5-4.5 10-10z" fill="url(#gm2)"/></svg></div><div><div class="ai-name">Gemini</div><span class="ai-maker">Google</span></div><span class="ai-tag soon">COMING SOON</span></div>
+        <div class="ai-chip live"><div class="ai-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg></div><div><div class="ai-name">Custom agents</div><span class="ai-maker">Any MCP-compatible AI</span></div><span class="ai-tag live">LIVE</span></div>
+      </div>
+    </div>
+    <div class="flow-footer"><strong>Connect once.</strong> Every answer your AI pulls from your operations is a reason to connect more.</div>
+  </div>
+</section>
+
+<!-- LOGO STRIP -->
+<div class="logos">
+  <div class="logos-lbl">Trusted by</div>
+  <div class="logos-row">
+    <span class="logo-item">GSK</span>
+    <span class="logo-item">Sodexo</span>
+    <span class="logo-item">Aramark</span>
+    <span class="logo-item">Hubbell</span>
+    <span class="logo-item">SafetyCulture</span>
+    <span class="logo-item">Extra Space Storage</span>
+    <span class="logo-item">Freudenberg</span>
+    <span class="logo-item">Element Materials</span>
+  </div>
+</div>
+
+<!-- DORIAN STORY -->
+<section class="section white">
+  <div class="section-inner">
+    <div class="story-grid">
+      <div>
+        <div class="section-eyebrow">A real example</div>
+        <h2 class="section-title">Six weeks of work.<br>Now it <span>just shows up.</span></h2>
+        <div class="story-quote">
+          <p>"Every quarter I'd spend weeks pulling data from meters, spreadsheets, maintenance logs, utility bills — all sources that don't talk to each other. I'd merge it manually, figure out which equipment was out of line, calculate the EnPIs the auditor needs, and write the whole thing up."</p>
+          <div class="story-attr">— Dorian, Energy Coordinator, Manufacturing Plant · ISO 50001 audit prep</div>
+        </div>
+        <div class="story-stats">
+          <div class="story-stat"><div class="story-stat-num">6 wks</div><div class="story-stat-lbl">Manual effort per audit cycle</div></div>
+          <div class="story-stat"><div class="story-stat-num">30 sec</div><div class="story-stat-lbl">With myDevices on a schedule</div></div>
+          <div class="story-stat"><div class="story-stat-num">Zero</div><div class="story-stat-lbl">New behaviors required</div></div>
+        </div>
+      </div>
+      <div class="story-body">
+        <p>We connected Dorian's sensors to myDevices. Now the compliance report, the SEU register, the EnPI calculations, the corrective action log — they run on a schedule and land in his inbox before the audit.</p>
+        <p>He didn't change a single thing about how he works. <strong>The outcome just arrives.</strong></p>
+        <p>That's what we mean by operational intelligence. Not a faster way to do the work. A system that does the work for you — because we already have the data, we already built the context, and we can just run it.</p>
+        <p>The measure of our success is simple: <strong>how many hours of manual work did we eliminate for the customer?</strong> Not sensors connected. Not dashboards built. Hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section class="section gray">
+  <div class="section-inner" style="text-align:center;">
+    <div class="section-eyebrow">The problem</div>
+    <h2 class="section-title" style="margin:0 auto 14px;">Your team spends weeks doing work<br>the data could do in seconds.</h2>
+    <p class="section-sub" style="margin:0 auto 44px;">Meters, spreadsheets, maintenance logs, utility bills — your operational data lives everywhere and talks to nothing. So every report, every audit, every analysis gets built the same way it always has. Manually. By people. Every time.</p>
+    <div class="compare-grid">
+      <div class="compare-card compare-light">
+        <div class="compare-label">AI already understands</div>
+        <ul class="compare-list">
+          <li class="compare-item"><span class="ci">✓</span>Documents &amp; email</li>
+          <li class="compare-item"><span class="ci">✓</span>Spreadsheets</li>
+          <li class="compare-item"><span class="ci">✓</span>CRM records &amp; tickets</li>
+          <li class="compare-item"><span class="ci">✓</span>Calendars &amp; meetings</li>
+          <li class="compare-item"><span class="ci">✓</span>Code &amp; databases</li>
+        </ul>
+      </div>
+      <div class="compare-card compare-dark">
+        <div class="compare-label">myDevices adds the physical world</div>
+        <ul class="compare-list">
+          <li class="compare-item"><span class="ci" style="color:#5EEAD4;">✓</span>Sensor readings &amp; telemetry</li>
+          <li class="compare-item"><span class="ci" style="color:#5EEAD4;">✓</span>Equipment signals &amp; runtime</li>
+          <li class="compare-item"><span class="ci" style="color:#5EEAD4;">✓</span>Building events &amp; alarms</li>
+          <li class="compare-item"><span class="ci" style="color:#5EEAD4;">✓</span>SCADA, BACnet &amp; Modbus</li>
+          <li class="compare-item"><span class="ci" style="color:#5EEAD4;">✓</span>Energy &amp; utility data</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASK ONCE / IN YOUR TOOLS -->
+<section class="section white">
+  <div class="section-inner">
+    <div class="tools-grid">
+      <div>
+        <div class="section-eyebrow">From one prompt · In your tools</div>
+        <h2 class="tools-hl">Ask once.<br>Get it in <span class="rotating-word" id="rword">Slack.</span></h2>
+        <p class="tools-sub">myDevices delivers answers into the tools your team already lives in — no new dashboard to learn, no platform to log into.</p>
+        <div class="tools-menu" id="toolsMenu">
+          <div class="tool-item active" data-idx="0">
+            <div class="tool-icon">
+              <svg viewBox="0 0 122.8 122.8"><path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zm6.5 0c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z" fill="#E01E5A"/><path d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zm0 6.5c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z" fill="#36C5F0"/><path d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zm-6.5 0c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z" fill="#2EB67D"/><path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="#ECB22E"/></svg>
+            </div>
+            <div><div class="tool-name">Slack</div><div class="tool-desc">Anomaly alert · file work order inline</div></div>
+          </div>
+          <div class="tool-item" data-idx="1">
+            <div class="tool-icon">
+              <svg viewBox="0 0 2228.8 2073.3"><path d="M1554.6 777.5h575.7c54.4 0 98.5 44.1 98.5 98.5v524.4c0 199.9-162.1 361.9-361.9 361.9h-1.7c-199.9 0-361.9-162-361.9-361.9V828.8c-.1-28.3 22.9-51.3 51.3-51.3z" fill="#5059C9"/><circle cx="1943.8" cy="440.6" r="233.2" fill="#5059C9"/><circle cx="1218.1" cy="336.4" r="336.4" fill="#7B83EB"/><path d="M1667.3 777.5H717.1c-53.7 1.3-96.3 45.9-95.1 99.6v598c-7.5 322.5 247.7 590.1 570.2 598 322.5-7.9 577.7-275.5 570.2-598v-598c1.2-53.7-41.3-98.3-95.1-99.6z" fill="#7B83EB"/><path d="M104.6 777.5h990.1c57.8 0 104.6 46.8 104.6 104.6v990.1c0 57.8-46.8 104.6-104.6 104.6H104.6C46.8 1976.8 0 1930 0 1872.2V882.1c0-57.8 46.8-104.6 104.6-104.6z" fill="#5059C9"/><path d="M861.6 1130.9H663.7v539.1H537.6v-539.1H340.6v-104.5h521v104.5z" fill="#fff"/></svg>
+            </div>
+            <div><div class="tool-name">Microsoft Teams</div><div class="tool-desc">Weekly summary · create ticket inline</div></div>
+          </div>
+          <div class="tool-item" data-idx="2">
+            <div class="tool-icon">
+              <svg viewBox="0 0 2289.75 2130"><path d="M1437.75 1011.75L532.5 852v1180.39c0 53.91 43.7 97.61 97.61 97.61h1562.28c53.91 0 97.61-43.7 97.61-97.61V1597.5l-852.25-585.75z" fill="#185C37"/><path d="M1437.75 0H630.11C576.2 0 532.5 43.7 532.5 97.61V532.5l905.25 532.5L1917 1224l372.75-159V532.5L1437.75 0z" fill="#21A366"/><path d="M532.5 532.5h905.25V1065H532.5z" fill="#107C41"/><path d="M97.61 479.25h976.28c53.91 0 97.61 43.7 97.61 97.61v976.28c0 53.91-43.7 97.61-97.61 97.61H97.61C43.7 1650.75 0 1607.05 0 1553.14V576.86c0-53.91 43.7-97.61 97.61-97.61z" fill="#107C41"/><path d="M302.3 1382.26l205.33-318.17L319.51 747.74h151.34l102.67 202.31c9.46 19.21 15.96 33.51 19.49 42.93h1.33c6.75-15.33 13.84-30.22 21.27-44.7l109.75-200.54h138.93l-192.9 314.5 197.79 319.99H720.61l-118.59-222.09c-5.59-9.45-10.32-19.39-14.16-29.69h-1.76c-3.47 10.09-8.07 19.74-13.72 28.81l-122.1 222.97H302.3z" fill="#fff"/></svg>
+            </div>
+            <div><div class="tool-name">Excel</div><div class="tool-desc">Anomaly log · live formulas · costed</div></div>
+          </div>
+          <div class="tool-item" data-idx="3">
+            <div class="tool-icon">
+              <svg viewBox="0 0 2289.75 2130"><circle cx="1153.13" cy="1065" r="1011.56" fill="#ED6C47"/><path d="M1153.13 53.44V1065l715.31 715.31c182.9-182.9 296.25-435.62 296.25-715.31 0-559.06-452.5-1011.56-1011.56-1011.56z" fill="#FF8F6B"/><path d="M97.61 479.25h976.28c53.91 0 97.61 43.7 97.61 97.61v976.28c0 53.91-43.7 97.61-97.61 97.61H97.61C43.7 1650.75 0 1607.05 0 1553.14V576.86c0-53.91 43.7-97.61 97.61-97.61z" fill="#C43E1C"/><path d="M620.81 747.74c70.04 0 123.45 15.69 160.23 47.06 36.78 31.38 55.17 76.06 55.17 134.05 0 38.16-9.11 72.05-27.32 101.66-18.22 29.62-44.06 52.52-77.54 68.71-33.48 16.19-72.16 24.28-116.05 24.28h-110.4v246.76H367.71V747.74h253.1zm-115.91 287.78h97.35c38.79 0 68.09-8.79 87.89-26.37 19.8-17.58 29.69-43.06 29.69-76.44 0-64.86-37.71-97.3-113.14-97.3H504.9v200.11z" fill="#fff"/></svg>
+            </div>
+            <div><div class="tool-name">PowerPoint</div><div class="tool-desc">Board deck · charts · recommended actions</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="tools-stage" id="toolsStage">
+        <!-- SLACK -->
+        <div class="tool-slide active">
+          <div class="slack-wrap">
+            <div class="slack-bar"><span class="slack-bar-title">Slack</span><span class="slack-bar-sub">· Acme Manufacturing workspace</span></div>
+            <div class="slack-chan"># facilities-ops <span>32 members</span></div>
+            <div class="slack-body">
+              <div class="slack-msg">
+                <div class="slack-av">mD</div>
+                <div>
+                  <div class="slack-head"><span class="slack-sender">myDevices</span><span class="slack-app-badge">APP</span><span class="slack-time">7:42 AM</span></div>
+                  <div class="slack-text">🚨 <strong>Energy anomaly detected</strong> — sustained outlier on rooftop equipment at FAC 1972.</div>
+                  <div class="slack-attach">
+                    <div class="slack-attach-title">Rooftop Unit 5 — running 25× above baseline</div>
+                    <div class="slack-fields">
+                      <div><div class="slack-field-label">Facility</div><div class="slack-field-val">FAC 1972 · Cottonwood Heights, UT</div></div>
+                      <div><div class="slack-field-label">Deviation</div><div class="slack-field-val red">+2,348% vs 90-day baseline</div></div>
+                      <div><div class="slack-field-label">Duration</div><div class="slack-field-val">16 days · since May 26</div></div>
+                      <div><div class="slack-field-label">Est. excess cost</div><div class="slack-field-val red">$1,070/month</div></div>
+                    </div>
+                    <div class="slack-cause">Probable cause: stuck compressor contactor — unit running 24/7 instead of cycling. RTU 4 shows identical signature.</div>
+                    <div class="slack-btns"><span class="slack-btn green">File work order</span><span class="slack-btn">View analysis</span><span class="slack-btn">Snooze 24h</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tool-prompt">Posted automatically when the outlier confirmed</div>
+        </div>
+        <!-- TEAMS -->
+        <div class="tool-slide">
+          <div class="teams-wrap">
+            <div class="teams-bar">Microsoft Teams · Facilities Operations</div>
+            <div class="teams-tabs"><span class="teams-tab">Posts</span><span class="teams-tab active">Energy Alerts</span><span class="teams-tab">Files</span></div>
+            <div class="teams-body">
+              <div class="teams-msg">
+                <div class="teams-msg-head"><div class="teams-av">mD</div><div><div class="teams-name">myDevices</div><div style="font-size:11px;color:#616161;">Today 7:42 AM</div></div></div>
+                <div class="teams-card">
+                  <div class="teams-card-strip"></div>
+                  <div class="teams-card-body">
+                    <div class="teams-card-title">⚠ Weekly portfolio energy summary — 1 action needed</div>
+                    <div class="teams-card-sub">6 facilities · June 1–11 · generated from live sensor data</div>
+                    <div class="teams-facts">
+                      <div class="teams-fact"><div class="teams-fact-label">Portfolio kWh</div><div class="teams-fact-val">1,766</div></div>
+                      <div class="teams-fact"><div class="teams-fact-label">Active outliers</div><div class="teams-fact-val red">2 units</div></div>
+                      <div class="teams-fact"><div class="teams-fact-label">Excess/month</div><div class="teams-fact-val red">$2,140</div></div>
+                    </div>
+                    <div class="teams-card-text">FAC 1972 rooftop units 4 &amp; 5 running at ~25× baseline since May 26. All other sites within normal range.</div>
+                    <div class="teams-btns"><span class="teams-btn primary">Create ticket</span><span class="teams-btn">Full report</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tool-prompt">"Send the weekly energy summary to the ops channel"</div>
+        </div>
+        <!-- EXCEL -->
+        <div class="tool-slide">
+          <div class="excel-wrap">
+            <div class="excel-bar">📊 Energy_Anomaly_Log_June2026.xlsx — Excel</div>
+            <div class="excel-ribbon"><span>File</span><span class="active">Home</span><span>Insert</span><span>Formulas</span><span>Data</span></div>
+            <div class="excel-formula"><span class="excel-cellref">H2</span><span>fx</span><span>=(C2-D2)*24*0.12*30</span></div>
+            <table class="excel-table">
+              <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th></tr>
+              <tr class="hdr"><td class="rn">1</td><td>Site</td><td>Asset</td><td>kWh/day</td><td>Baseline</td><td>Deviation</td><td>Days</td><td>Status</td><td>Excess $/mo</td></tr>
+              <tr><td class="rn">2</td><td>FAC 1972</td><td>Rooftop Unit 5</td><td class="right">51.4</td><td class="right">2.1</td><td class="red">+2,348%</td><td class="right">16</td><td class="red">OUTLIER</td><td class="right red">$1,070</td></tr>
+              <tr><td class="rn">3</td><td>FAC 1972</td><td>Rooftop Unit 4</td><td class="right">47.6</td><td class="right">1.9</td><td class="red">+2,405%</td><td class="right">16</td><td class="red">OUTLIER</td><td class="right red">$990</td></tr>
+              <tr><td class="rn">4</td><td>FAC 1639</td><td>Panel CT-2</td><td class="right">36.7</td><td class="right">9.9</td><td class="amb">+271%</td><td class="right">3</td><td class="amb">EVENTS ×3</td><td class="right">$580</td></tr>
+              <tr><td class="rn">5</td><td>FAC 8378</td><td>All meters</td><td class="right">23.3</td><td class="right">22.8</td><td class="grn">+2%</td><td class="right">—</td><td class="grn">NORMAL</td><td class="right">$0</td></tr>
+              <tr><td class="rn">6</td><td></td><td></td><td></td><td></td><td></td><td></td><td style="font-weight:700;">TOTAL</td><td class="right red" style="font-weight:700;">$2,815</td></tr>
+            </table>
+            <div class="excel-tabs"><span class="excel-tab active">Anomaly Log</span><span class="excel-tab">Trends</span><span class="excel-tab">By Site</span></div>
+          </div>
+          <div class="tool-prompt">"Export this month's anomalies to Excel"</div>
+        </div>
+        <!-- POWERPOINT -->
+        <div class="tool-slide">
+          <div class="ppt-wrap">
+            <div class="ppt-bar">📽 Q2_Energy_Review_Board.pptx — PowerPoint</div>
+            <div class="ppt-ribbon"><span>File</span><span class="active">Home</span><span>Insert</span><span>Design</span><span>Slide Show</span></div>
+            <div class="ppt-main">
+              <div class="ppt-thumbs">
+                <div class="ppt-thumb"><span class="ppt-thumb-n">1</span><div class="ppt-thumb-bar navy" style="width:70%"></div><div class="ppt-thumb-bar navy" style="width:45%"></div></div>
+                <div class="ppt-thumb active"><span class="ppt-thumb-n">2</span><div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px;"><div style="height:8px;background:rgba(20,184,166,0.5);border-radius:1px;"></div><div style="height:8px;background:rgba(248,113,113,0.5);border-radius:1px;"></div><div style="height:8px;background:rgba(253,224,71,0.5);border-radius:1px;"></div><div style="height:8px;background:rgba(202,220,252,0.5);border-radius:1px;"></div></div></div>
+                <div class="ppt-thumb"><span class="ppt-thumb-n">3</span><div class="ppt-thumb-bar" style="width:85%"></div><div class="ppt-thumb-bar" style="width:70%"></div><div class="ppt-thumb-bar" style="width:60%"></div></div>
+                <div class="ppt-thumb"><span class="ppt-thumb-n">4</span><div class="ppt-thumb-bar" style="width:75%"></div><div class="ppt-thumb-bar" style="width:55%"></div></div>
+              </div>
+              <div class="ppt-stage">
+                <div class="ppt-slide">
+                  <div class="ppt-eyebrow">Q2 Portfolio Energy Review</div>
+                  <div class="ppt-title">One fault. $2,815 a month.</div>
+                  <div class="ppt-sub">6 facilities · June 1–11, 2026 · generated from live operational data by myDevices</div>
+                  <div class="ppt-kpis">
+                    <div class="ppt-kpi"><div class="ppt-kpi-num" style="color:#14B8A6;">1,766</div><div class="ppt-kpi-lbl">Portfolio kWh</div></div>
+                    <div class="ppt-kpi"><div class="ppt-kpi-num" style="color:#F87171;">2</div><div class="ppt-kpi-lbl">Active outliers</div></div>
+                    <div class="ppt-kpi"><div class="ppt-kpi-num" style="color:#FCD34D;">$2,815</div><div class="ppt-kpi-lbl">Excess / month</div></div>
+                    <div class="ppt-kpi"><div class="ppt-kpi-num" style="color:#CADCFC;">4 of 6</div><div class="ppt-kpi-lbl">Sites within baseline</div></div>
+                  </div>
+                  <div class="ppt-chart-row">
+                    <div class="ppt-chart">
+                      <div class="ppt-chart-title">RTU 5 daily kWh — anomaly began May 26</div>
+                      <div class="ppt-bars">
+                        <div class="ppt-bar" style="height:5%;background:rgba(202,220,252,0.25)"></div><div class="ppt-bar" style="height:4%;background:rgba(202,220,252,0.25)"></div><div class="ppt-bar" style="height:5%;background:rgba(202,220,252,0.25)"></div><div class="ppt-bar" style="height:4%;background:rgba(202,220,252,0.25)"></div><div class="ppt-bar" style="height:40%;background:#EF4444"></div><div class="ppt-bar" style="height:91%;background:#EF4444"></div><div class="ppt-bar" style="height:91%;background:#EF4444"></div><div class="ppt-bar" style="height:91%;background:#EF4444"></div><div class="ppt-bar" style="height:99%;background:#EF4444"></div><div class="ppt-bar" style="height:100%;background:#EF4444"></div><div class="ppt-bar" style="height:101%;background:#EF4444"></div><div class="ppt-bar" style="height:96%;background:#EF4444"></div>
+                      </div>
+                    </div>
+                    <div class="ppt-insight">
+                      <div class="ppt-insight-title">Recommended action</div>
+                      <div class="ppt-insight-text">Dispatch HVAC tech to FAC 1972. Both RTUs running 24/7 since May 26 — stuck compressor signature. Resolution saves $2,060/mo.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tool-prompt">"Build me the Q2 energy board deck"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES / ACTIONS -->
+<section class="section gray">
+  <div class="section-inner">
+    <div class="section-eyebrow">And it does the work</div>
+    <h2 class="section-title">Not just answers. <strong>Actions.</strong></h2>
+    <p class="section-sub">myDevices doesn't just answer questions. It triggers the next step — in your CMMS, your inbox, your calendar. Automatically.</p>
+    <div class="outcomes-grid">
+      <div class="outcome-card" style="border-top-color:#1E3A8A;">
+        <div class="outcome-num" style="color:#1E3A8A;">01.</div>
+        <div class="outcome-title">Send the briefing</div>
+        <div class="outcome-body">Daily energy briefings emailed to your team every morning. Personalized per facility, per role. No dashboards required.</div>
+        <div class="outcome-flow">
+          <span class="outcome-flow-item">Anomaly</span><span class="outcome-flow-arrow">→</span>
+          <span class="outcome-flow-item">Briefing</span><span class="outcome-flow-arrow">→</span>
+          <span class="outcome-flow-item">Inbox</span>
+        </div>
+      </div>
+      <div class="outcome-card" style="border-top-color:#14B8A6;">
+        <div class="outcome-num" style="color:#14B8A6;">02.</div>
+        <div class="outcome-title">File the work order</div>
+        <div class="outcome-body">When an asset drifts off baseline, myDevices generates a work order in your CMMS with the asset, issue, and recommended fix already included.</div>
+        <div class="outcome-flow">
+          <span class="outcome-flow-item">Detection</span><span class="outcome-flow-arrow">→</span>
+          <span class="outcome-flow-item">Work order</span><span class="outcome-flow-arrow">→</span>
+          <span class="outcome-flow-item">Tech</span>
+        </div>
+      </div>
+      <div class="outcome-card" style="border-top-color:#D97706;">
+        <div class="outcome-num" style="color:#D97706;">03.</div>
+        <div class="outcome-title">Close the audit</div>
+        <div class="outcome-body">ISO 50001 reviews, EnPI tracking, SEU registers — generated from live data on a schedule. Audit-ready, every quarter, automatically.</div>
+        <div class="outcome-flow">
+          <span class="outcome-flow-item">Quarter</span><span class="outcome-flow-arrow">→</span>
+          <span class="outcome-flow-item">Report</span><span class="outcome-flow-arrow">→</span>
+          <span class="outcome-flow-item">Auditor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="section white">
+  <div class="section-inner">
+    <div class="section-eyebrow">One platform. Every monitoring problem.</div>
+    <h2 class="section-title">Wherever your team is doing this work<br>manually today — we automate it.</h2>
+    <div class="uc-grid">
+      <div class="uc-card" style="border-left-color:#D97706;">
+        <div class="uc-title">Energy management</div>
+        <div class="uc-body">Baselines, anomaly detection, variance analysis, ISO 50001 evidence packages.</div>
+        <div class="uc-outcome">ISO audits · board decks · automatically →</div>
+      </div>
+      <div class="uc-card" style="border-left-color:#2563EB;">
+        <div class="uc-title">Cold chain &amp; compliance</div>
+        <div class="uc-body">Temperature monitoring, exceedance detection, FDA deviation reports auto-generated.</div>
+        <div class="uc-outcome">Excursion reports filed before QA asks →</div>
+      </div>
+      <div class="uc-card" style="border-left-color:#7C3AED;">
+        <div class="uc-title">Machine health &amp; OEE</div>
+        <div class="uc-body">Vibration, runtime, power draw — anomalies flagged and work orders filed before failure.</div>
+        <div class="uc-outcome">Anomaly → work order → tech. Automatically →</div>
+      </div>
+      <div class="uc-card" style="border-left-color:#0891B2;">
+        <div class="uc-title">Water leak &amp; flood detection</div>
+        <div class="uc-body">Leak detected, alert sent, work order filed, facilities team notified — in seconds.</div>
+        <div class="uc-outcome">Detection to work order in seconds →</div>
+      </div>
+      <div class="uc-card" style="border-left-color:#059669;">
+        <div class="uc-title">Indoor air quality</div>
+        <div class="uc-body">CO₂, PM2.5, temperature, humidity — compliance reports on schedule, no data wrangling.</div>
+        <div class="uc-outcome">Compliance reports on a schedule →</div>
+      </div>
+      <div class="uc-card" style="border-left-color:#9333EA;">
+        <div class="uc-title">Asset tracking &amp; utilization</div>
+        <div class="uc-body">Location, dwell time, utilization rates — automatically surfaced, no manual log needed.</div>
+        <div class="uc-outcome">Utilization reports. Automatically →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IOT ANALYTICS VALIDATION -->
+<section class="section gray">
+  <div class="section-inner" style="text-align:center;">
+    <div class="section-eyebrow">What analysts are saying</div>
+    <h2 class="section-title" style="margin:0 auto 36px;">The industry just named<br>the problem we solved.</h2>
+    <div class="quote-block">
+      <p class="quote-text">"Raw telemetry and time-series data stored in traditional historians lack the necessary business context to be useful for AI applications. Manufacturers must implement an industrial DataOps layer to structure, standardize, and contextualize this data."</p>
+      <div class="quote-attr">— <strong>IoT Analytics</strong>, Digital &amp; AI Adoption in Process Manufacturing · June 2026</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">88%</div><div class="stat-label">of process manufacturers have already deployed smart sensors</div><div class="stat-sub">The hardware is in place. The data layer is the gap.</div></div>
+      <div class="stat-card"><div class="stat-num">71%</div><div class="stat-label">cite data foundation cost as the #1 barrier to AI adoption</div><div class="stat-sub">myDevices is the pre-built foundation — eliminating the barrier.</div></div>
+      <div class="stat-card"><div class="stat-num">12%</div><div class="stat-label">reduction in plant operating costs expected within 3 years</div><div class="stat-sub">13.4% for North American manufacturers.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="section dark">
+  <div class="section-inner">
+    <div class="section-eyebrow light">Deployed where downtime is expensive</div>
+    <h2 class="section-title white" style="margin-bottom:40px;">Trusted by enterprises that can't afford<br>to get operations wrong.</h2>
+    <div class="proof-logos">
+      <div class="proof-logo-card"><div class="proof-logo-name">GSK</div></div>
+      <div class="proof-logo-card"><div class="proof-logo-name">Sodexo</div></div>
+      <div class="proof-logo-card"><div class="proof-logo-name">Aramark</div></div>
+      <div class="proof-logo-card"><div class="proof-logo-name">Hubbell</div></div>
+      <div class="proof-logo-card"><div class="proof-logo-name">SafetyCulture</div></div>
+      <div class="proof-logo-card"><div class="proof-logo-name">Extra Space Storage</div></div>
+      <div class="proof-logo-card"><div class="proof-logo-name">Freudenberg (FST)</div></div>
+      <div class="proof-logo-card"><div class="proof-logo-name">Element Materials</div></div>
+    </div>
+    <div class="proof-stats">
+      <div class="proof-stat"><div class="proof-stat-num">650+</div><div class="proof-stat-lbl">Certified LoRaWAN device types</div></div>
+      <div class="proof-stat"><div class="proof-stat-num">125M+</div><div class="proof-stat-lbl">Sensor readings processed</div></div>
+      <div class="proof-stat"><div class="proof-stat-num">2,300+</div><div class="proof-stat-lbl">Gateways under management</div></div>
+      <div class="proof-stat"><div class="proof-stat-num">6</div><div class="proof-stat-lbl">Industries in production today</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div style="max-width:680px;margin:0 auto;">
+    <div class="section-eyebrow light" style="justify-content:center;display:flex;">See it on your data</div>
+    <div class="cta-h">Stop pulling reports.<br><strong>Start asking questions.</strong></div>
+    <p class="cta-sub">Connect myDevices to Claude in under 5 minutes. Your team can ask their first question — and get a real answer from real operational data — this afternoon.</p>
+    <div class="cta-btns">
+      <button class="cta-btn-p">Book a Demo →</button>
+      <button class="cta-btn-s">Talk to an engineer</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><em>my</em>Devices</div>
+  <div class="footer-links">
+    <a href="#" class="footer-link">Platform</a>
+    <a href="#" class="footer-link">Security</a>
+    <a href="#" class="footer-link">Privacy</a>
+    <a href="#" class="footer-link">Contact</a>
+  </div>
+  <div class="footer-note">© 2026 myDevices, Inc. · Operational Intelligence Platform</div>
+</footer>
+
+<script>
+const menu = document.getElementById('toolsMenu');
+const stage = document.getElementById('toolsStage');
+const rword = document.getElementById('rword');
+const words = ['Slack.','Teams.','Excel.','PowerPoint.'];
+const colors = ['#611F69','#5B5FC7','#107C41','#B7472A'];
+let current = 0;
+
+function go(idx, resetTimer) {
+  document.querySelectorAll('.tool-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tool-slide').forEach(el => el.classList.remove('active'));
+  menu.querySelectorAll('.tool-item')[idx].classList.add('active');
+  stage.querySelectorAll('.tool-slide')[idx].classList.add('active');
+  rword.textContent = words[idx];
+  rword.style.color = colors[idx];
+  current = idx;
+  if (resetTimer) { clearInterval(timer); timer = setInterval(advance, 5000); }
+}
+
+menu.querySelectorAll('.tool-item').forEach((item, i) => {
+  item.addEventListener('click', () => go(i, true));
+});
+
+function advance() { go((current + 1) % 4, false); }
+let timer = setInterval(advance, 5000);
+</script>
+</body>
+</html>
