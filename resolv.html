@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resolv — Mental healthcare that moves you forward</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     RESOLV — design tokens
+     Palette: warm cream paper, muted olive/sage, clay orange,
+     soft ochre, sand. Display: Fraunces. Body: Figtree.
+     ============================================================ */
+  :root{
+    --paper:      #F6F1E8;   /* warm cream base            */
+    --paper-2:    #EFE7D8;   /* slightly deeper paper      */
+    --sand:       #E7DBC6;   /* card / strip fill          */
+    --sand-deep:  #DECEB2;   /* card edge / hover          */
+    --olive:      #6E7459;   /* primary brand green        */
+    --olive-deep: #545A41;   /* deep green block / text    */
+    --olive-soft: #8A906F;   /* muted green text accent    */
+    --clay:       #BE7E55;   /* muted terracotta accent    */
+    --clay-soft:  #CF9168;   /* hover clay                 */
+    --ochre:      #C9A24B;   /* muted mustard highlight    */
+    --ochre-soft: #D8BA72;
+    --ink:        #34302A;   /* warm near-black text       */
+    --ink-soft:   #6A645A;   /* muted body text            */
+    --line:       #DDD2BF;   /* hairline on paper          */
+    --radius:     26px;
+    --radius-sm:  16px;
+    --maxw:       1200px;
+    --ease:       cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+  /* ---------- typography helpers ---------- */
+  .serif{font-family:"Fraunces",Georgia,serif}
+  .eyebrow{
+    font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--olive);display:inline-flex;align-items:center;gap:.55em;
+  }
+  .eyebrow::before{content:"";width:22px;height:1.5px;background:var(--clay);display:inline-block}
+  .eyebrow.center::before{display:none}
+
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:430;line-height:1.04;letter-spacing:-.01em;margin:0}
+  .em-italic{font-style:italic;font-weight:430}
+  /* color-highlighted key words (no underline) */
+  .hl{color:var(--clay);white-space:nowrap}
+  .hl-ochre{color:var(--olive)}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:.6em;cursor:pointer;border:0;
+    font-family:inherit;font-size:.82rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    padding:15px 26px;border-radius:100px;transition:transform .25s var(--ease),background .25s var(--ease),box-shadow .25s var(--ease);
+  }
+  .btn .arr{transition:transform .3s var(--ease)}
+  .btn:hover .arr{transform:translateX(4px)}
+  .btn-primary{background:var(--olive);color:#FBF8F1;box-shadow:0 10px 24px -14px rgba(84,90,65,.9)}
+  .btn-primary:hover{background:var(--olive-deep);transform:translateY(-2px)}
+  .btn-clay{background:var(--clay);color:#FBF6EF}
+  .btn-clay:hover{background:var(--clay-soft);transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:var(--ink);padding-left:6px;padding-right:6px}
+  .btn-ghost:hover{color:var(--clay)}
+  .btn-light{background:#F4EFE3;color:var(--olive-deep)}
+  .btn-light:hover{background:#fff;transform:translateY(-2px)}
+
+  /* ---------- reveal animation ---------- */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- image placeholder (warm duotone) ---------- */
+  .ph{
+    position:relative;border-radius:var(--radius);overflow:hidden;
+    background:
+      radial-gradient(120% 120% at 80% 10%, rgba(201,162,75,.35), transparent 55%),
+      linear-gradient(150deg, #B7A988 0%, #9AA079 45%, #C39A77 100%);
+    isolation:isolate;
+  }
+  .ph::before{ /* soft grain/texture */
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 25% 30%, rgba(255,255,255,.18), transparent 40%),
+              radial-gradient(circle at 70% 80%, rgba(84,90,65,.25), transparent 45%);
+    mix-blend-mode:soft-light;
+  }
+  .ph .cap{
+    position:absolute;left:14px;bottom:13px;right:14px;z-index:2;
+    font-size:.72rem;font-style:italic;letter-spacing:.01em;color:#FBF7EE;
+    text-shadow:0 1px 8px rgba(50,45,35,.55);font-family:"Fraunces",serif;
+  }
+  .ph .tag{
+    position:absolute;top:13px;left:14px;z-index:2;display:inline-flex;align-items:center;gap:6px;
+    font-family:"Figtree",sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:#FBF7EE;background:rgba(52,48,42,.34);backdrop-filter:blur(3px);
+    padding:5px 10px;border-radius:100px;
+  }
+  .ph .tag svg{width:11px;height:11px}
+
+  /* ============================================================
+     NAV
+     ============================================================ */
+  header.nav{position:sticky;top:0;z-index:60;transition:background .3s var(--ease),box-shadow .3s var(--ease)}
+  header.nav.scrolled{background:rgba(246,241,232,.86);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+  .brand{font-family:"Fraunces",serif;font-size:1.6rem;font-weight:500;letter-spacing:-.02em;color:var(--olive-deep);display:inline-flex;align-items:baseline}
+  .brand .dot{color:var(--clay)}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{font-size:.92rem;font-weight:500;color:var(--ink-soft);transition:color .2s}
+  .nav-links a:hover{color:var(--clay)}
+  .nav-cta{display:flex;align-items:center;gap:14px}
+  .menu-btn{display:none;background:none;border:0;cursor:pointer;padding:8px;color:var(--ink)}
+  .menu-btn svg{width:26px;height:26px}
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero{padding:14px 0 8px}
+  .hero-card{
+    background:var(--paper-2);border-radius:34px;padding:54px 54px 46px;
+    display:grid;grid-template-columns:1.02fr 1fr;gap:48px;align-items:center;position:relative;
+    box-shadow:0 40px 80px -60px rgba(84,90,65,.5);
+  }
+  .hero-copy h1{font-size:clamp(2.7rem,5.4vw,4.5rem);margin:18px 0 0}
+  .hero-copy .sub{font-size:1.06rem;color:var(--ink-soft);max-width:30em;margin:22px 0 30px}
+  .hero-actions{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .hero-media{position:relative}
+  .hero-media .ph{aspect-ratio:4/4.4;border-radius:28px}
+  .ins-chip{
+    position:absolute;left:-22px;bottom:26px;z-index:5;background:var(--paper);
+    border:1px solid var(--line);border-radius:100px;padding:11px 18px 11px 13px;
+    display:flex;align-items:center;gap:11px;box-shadow:0 18px 40px -24px rgba(52,48,42,.6);
+    font-size:.86rem;font-weight:600;color:var(--olive-deep)
+  }
+  .ins-chip .ic{width:34px;height:34px;border-radius:50%;background:var(--olive);display:grid;place-items:center;flex:none}
+  .ins-chip .ic svg{width:18px;height:18px;stroke:#F6F1E8}
+
+  /* ---------- trust strip ---------- */
+  .trust{padding:40px 0 8px}
+  .trust-in{display:flex;align-items:center;gap:34px;flex-wrap:wrap;justify-content:center;
+            border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0}
+  .trust-label{font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+  .logos{display:flex;gap:30px;flex-wrap:wrap;align-items:center}
+  .logos span{font-family:"Fraunces",serif;font-size:1.18rem;font-weight:600;color:var(--olive-soft);opacity:.8}
+
+  /* ============================================================
+     section rhythm
+     ============================================================ */
+  .sec{padding:96px 0}
+  .sec-head{max-width:46rem}
+  .sec-head .eyebrow{margin-bottom:18px}
+
+  /* ---------- philosophy (big type on long lines) ---------- */
+  .philo{text-align:center}
+  .philo h2{font-size:clamp(2.4rem,4.6vw,3.6rem);margin-bottom:34px}
+  .philo .big{
+    font-family:"Fraunces",serif;font-weight:340;font-size:clamp(1.5rem,3vw,2.15rem);
+    line-height:1.34;max-width:24em;margin:0 auto 22px;color:var(--ink)
+  }
+  .philo .big.second{color:var(--ink-soft);font-size:clamp(1.25rem,2.4vw,1.7rem);max-width:30em}
+
+  /* ---------- the resolv way (tenets) ---------- */
+  .way{background:var(--sand);border-radius:var(--radius)}
+  .way-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:46px}
+  .tenet{padding:34px 38px;border-top:1px solid var(--sand-deep)}
+  .tenet:nth-child(odd){border-right:1px solid var(--sand-deep)}
+  .tenet .tn-head{display:flex;align-items:center;gap:15px;margin-bottom:16px}
+  .tenet .tic{width:50px;height:50px;border-radius:15px;background:var(--paper);display:grid;place-items:center;flex:none;
+              box-shadow:0 10px 22px -16px rgba(52,48,42,.8);transition:transform .3s var(--ease),background .3s var(--ease)}
+  .tenet:hover .tic{transform:translateY(-3px) rotate(-3deg);background:#FBF7EE}
+  .tenet .tic svg{width:25px;height:25px;stroke:var(--olive);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .tenet .tn{font-family:"Fraunces",serif;font-style:italic;font-size:1.05rem;color:var(--clay)}
+  .tenet h3{font-size:1.5rem;margin-bottom:10px}
+  .tenet p{color:var(--ink-soft);margin:0;font-size:.98rem}
+
+  /* ---------- how it works (true sequence) ---------- */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:52px;position:relative}
+  .step{position:relative}
+  .step .num{font-family:"Fraunces",serif;font-size:2.4rem;font-weight:300;color:var(--clay);line-height:1}
+  .step .bar{height:2px;background:var(--line);margin:18px 0 20px;position:relative;overflow:hidden}
+  .step .bar::after{content:"";position:absolute;left:0;top:0;height:100%;width:38%;background:var(--olive)}
+  .step h3{font-size:1.28rem;margin-bottom:9px}
+  .step p{color:var(--ink-soft);font-size:.95rem;margin:0}
+
+  /* ---------- mid CTA (green block) ---------- */
+  .cta-band{background:var(--olive-deep);border-radius:var(--radius);color:#F4EFE3;
+            padding:64px;display:flex;align-items:center;justify-content:space-between;gap:36px;flex-wrap:wrap;position:relative;overflow:hidden}
+  .cta-band::after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;border-radius:50%;
+                  background:radial-gradient(circle,rgba(201,162,75,.5),transparent 70%)}
+  .cta-band h2{font-size:clamp(2rem,4vw,3rem);color:#F7F2E6;max-width:14em;position:relative;z-index:2}
+  .cta-band .em-italic{color:var(--ochre-soft)}
+
+  /* ---------- who is resolv for / personas ---------- */
+  .who-intro{max-width:44rem;margin-bottom:14px}
+  .who-intro .lead{font-family:"Fraunces",serif;font-size:clamp(1.4rem,2.6vw,1.95rem);font-weight:340;line-height:1.3;color:var(--ink)}
+  .patterns{margin-top:40px}
+  .patterns .pt-h{font-size:1.7rem;margin-bottom:10px}
+  .patterns .pt-p{color:var(--ink-soft);max-width:42rem;margin:0 0 38px}
+  .persona-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  /* vertical timeline (replaces persona boxes) */
+  .timeline{margin-top:44px;position:relative;max-width:64rem}
+  .tl-item{display:grid;grid-template-columns:80px 1fr;gap:30px;padding-bottom:48px;position:relative}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-node{position:relative;display:flex;justify-content:center}
+  .tl-node .tl-ic{width:66px;height:66px;border-radius:50%;flex:none;display:grid;place-items:center;
+                 background:var(--paper-2);box-shadow:0 0 0 5px var(--paper),0 0 0 6px var(--sand-deep);
+                 transition:transform .3s var(--ease),background .3s var(--ease)}
+  .tl-item:hover .tl-ic{transform:translateY(-3px);background:#FBF7EE}
+  .tl-node .tl-ic svg{width:30px;height:30px;stroke:var(--olive);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .tl-item:not(:last-child) .tl-node::after{content:"";position:absolute;top:76px;bottom:-48px;left:50%;width:2px;
+                 transform:translateX(-50%);background:linear-gradient(var(--sand-deep),var(--line))}
+  .tl-body{padding-top:5px}
+  .tl-body h3{font-size:1.55rem;margin-bottom:10px}
+  .tl-body .signs{color:var(--ink-soft);font-size:1.02rem;margin:0 0 14px;max-width:46rem}
+  .tl-body .feel{font-family:"Fraunces",serif;font-style:italic;color:var(--clay);font-size:1.22rem;margin:0 0 13px;line-height:1.35}
+  .tl-body .want{font-size:.96rem;color:var(--olive-deep);display:flex;gap:9px;align-items:flex-start;max-width:44rem}
+  .tl-body .want b{color:var(--olive);font-weight:700;white-space:nowrap}
+
+  /* ---------- what we help with (9 grid) ---------- */
+  .help{background:var(--sand);border-radius:var(--radius)}
+  .help-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px}
+  .hcard{background:var(--paper);border-radius:var(--radius-sm);padding:26px 24px;
+         border:1px solid transparent;transition:border-color .25s var(--ease),transform .25s var(--ease),background .25s var(--ease)}
+  .hcard:hover{transform:translateY(-3px);border-color:var(--sand-deep);background:#FBF7EE}
+  .hcard .hi{width:40px;height:40px;border-radius:11px;background:var(--paper-2);display:grid;place-items:center;margin-bottom:16px}
+  .hcard .hi svg{width:20px;height:20px;stroke:var(--olive);fill:none;stroke-width:1.6}
+  .hcard h3{font-size:1.16rem;margin-bottom:7px}
+  .hcard p{color:var(--ink-soft);font-size:.9rem;margin:0;line-height:1.5}
+  .help-foot{margin-top:40px;text-align:center}
+
+  /* ---------- testimonials ---------- */
+  .testi{text-align:center}
+  .testi h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:8px}
+  .testi .sub{color:var(--ink-soft);margin-bottom:48px}
+  .quote-stage{max-width:50rem;margin:0 auto;min-height:230px;position:relative}
+  .quote{opacity:0;visibility:hidden;position:absolute;inset:0;transition:opacity .6s var(--ease);display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+  .quote.on{opacity:1;visibility:visible;position:relative}
+  .quote .mark{font-family:"Fraunces",serif;font-size:3.4rem;color:var(--clay);line-height:.5;height:.4em;opacity:.6}
+  .quote blockquote{font-family:"Fraunces",serif;font-weight:340;font-size:clamp(1.4rem,2.9vw,2.1rem);
+                    line-height:1.32;margin:18px 0 26px;color:var(--ink);max-width:24em}
+  .quote .who{display:flex;align-items:center;gap:12px;justify-content:center}
+  .quote .av{width:46px;height:46px;border-radius:50%;background:linear-gradient(140deg,var(--olive-soft),var(--clay));flex:none}
+  .quote .who .nm{font-weight:700;color:var(--ink);font-size:.95rem;text-align:left}
+  .quote .who .ro{color:var(--ink-soft);font-size:.85rem;text-align:left}
+  .dots{display:flex;gap:9px;justify-content:center;margin-top:34px}
+  .dots button{width:9px;height:9px;border-radius:50%;border:0;background:var(--sand-deep);cursor:pointer;padding:0;transition:width .3s var(--ease),background .3s var(--ease)}
+  .dots button.on{width:26px;border-radius:6px;background:var(--clay)}
+
+  /* ---------- final CTA ---------- */
+  .final-card{background:var(--paper-2);border-radius:34px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;align-items:stretch;box-shadow:0 40px 80px -60px rgba(84,90,65,.5)}
+  .final-copy{padding:64px 56px}
+  .final-copy .eyebrow{margin-bottom:20px}
+  .final-copy h2{font-size:clamp(2.2rem,4.2vw,3.4rem);margin-bottom:20px}
+  .final-copy p{color:var(--ink-soft);max-width:26em;margin:0 0 30px;font-size:1.05rem}
+  .final-media{position:relative;min-height:420px}
+  .final-media .ph{position:absolute;inset:0;border-radius:0}
+
+  /* ---------- footer ---------- */
+  footer.ft{background:var(--olive-deep);color:#E9E2D2;margin-top:96px;padding:72px 0 34px}
+  .ft-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+  .ft .brand{color:#F4EFE3;font-size:2rem;display:block;margin-bottom:14px}
+  .ft .tagline{font-family:"Fraunces",serif;font-style:italic;font-size:1.5rem;color:#EBE3D2;line-height:1.2}
+  .ft h4{font-family:"Figtree",sans-serif;font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ochre-soft);margin:0 0 18px;font-weight:700}
+  .ft ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+  .ft ul a{color:#D8D0BE;font-size:.94rem;transition:color .2s}
+  .ft ul a:hover{color:#fff}
+  .ft-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+             margin-top:54px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);
+             font-size:.82rem;color:#BDB6A4}
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width:980px){
+    .nav-links{display:none}
+    .menu-btn{display:block}
+    .hero-card{grid-template-columns:1fr;padding:36px 30px 34px;gap:34px}
+    .hero-media{order:-1}
+    .ins-chip{left:auto;right:18px}
+    .steps{grid-template-columns:repeat(2,1fr);gap:32px}
+    .help-grid{grid-template-columns:repeat(2,1fr)}
+    .final-card{grid-template-columns:1fr}
+    .final-media{min-height:300px;order:-1}
+    .ft-top{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:620px){
+    body{font-size:16px}
+    .wrap{padding:0 18px}
+    .sec{padding:66px 0}
+    .way-grid{grid-template-columns:1fr}
+    .tenet:nth-child(odd){border-right:0}
+    .help-grid{grid-template-columns:1fr}
+    .persona{grid-template-columns:84px 1fr;gap:16px;padding:18px}
+    .tl-item{grid-template-columns:60px 1fr;gap:18px}
+    .tl-node .tl-ic{width:52px;height:52px}
+    .tl-node .tl-ic svg{width:24px;height:24px}
+    .tl-item:not(:last-child) .tl-node::after{top:62px}
+    .cta-band{padding:40px 28px}
+    .philo .big{font-size:1.3rem}
+    .final-copy{padding:40px 28px}
+    .ft-top{grid-template-columns:1fr}
+  }
+
+  /* mobile menu panel */
+  .mobile-menu{position:fixed;inset:0;z-index:90;background:var(--paper);transform:translateY(-100%);
+               transition:transform .4s var(--ease);display:flex;flex-direction:column;padding:26px}
+  .mobile-menu.open{transform:none}
+  .mobile-menu .mm-top{display:flex;justify-content:space-between;align-items:center}
+  .mobile-menu nav{display:flex;flex-direction:column;gap:6px;margin-top:30px}
+  .mobile-menu nav a{font-family:"Fraunces",serif;font-size:1.9rem;color:var(--ink);padding:10px 0;border-bottom:1px solid var(--line)}
+  .mobile-menu .btn{margin-top:26px;align-self:flex-start}
+
+  :focus-visible{outline:2.5px solid var(--clay);outline-offset:3px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="#" class="brand">Resolv<span class="dot">.</span></a>
+    <nav class="nav-links">
+      <a href="#philosophy">Philosophy</a>
+      <a href="#how">How It Works</a>
+      <a href="#who">Who It's For</a>
+      <a href="#help">What We Help With</a>
+      <a href="#testimonials">Stories</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#start" class="btn btn-primary">Get Started</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mm-top">
+    <span class="brand">Resolv<span class="dot">.</span></span>
+    <button class="menu-btn" id="menuClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <nav>
+    <a href="#philosophy">Philosophy</a>
+    <a href="#how">How It Works</a>
+    <a href="#who">Who It's For</a>
+    <a href="#help">What We Help With</a>
+    <a href="#testimonials">Stories</a>
+  </nav>
+  <a href="#start" class="btn btn-primary">Get Started</a>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-card reveal">
+      <div class="hero-copy">
+        <span class="eyebrow">Evidence-based mental health care</span>
+        <h1>Mental healthcare that <span class="serif em-italic hl">moves</span> you forward.</h1>
+        <p class="sub">Resolv delivers practical, evidence-based mental health care designed to improve how you think, regulate, and respond in real life.</p>
+        <div class="hero-actions">
+          <a href="#start" class="btn btn-primary">Get Started <span class="arr">→</span></a>
+          <a href="#how" class="btn btn-ghost">See how it works</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="ph">
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-4-7 6"/></svg>Hero image</span>
+          <span class="cap">Couple, warm golden-hour light — calm, connected, real</span>
+        </div>
+        <div class="ins-chip">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>
+          Covered by most insurance plans
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TRUST STRIP ===================== -->
+<section class="trust">
+  <div class="wrap trust-in reveal">
+    <span class="trust-label">In-network with most major plans</span>
+    <div class="logos">
+      <span>Aetna</span><span>Cigna</span><span>BlueCross</span><span>UnitedHealthcare</span><span>Optum</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PHILOSOPHY ===================== -->
+<section class="sec philo" id="philosophy">
+  <div class="wrap">
+    <div class="reveal" style="max-width:52rem;margin:0 auto;text-align:center">
+      <span class="eyebrow center" style="justify-content:center">The Philosophy</span>
+      <h2 style="margin-top:16px">Care that <span class="serif em-italic hl">works.</span></h2>
+    </div>
+    <p class="big reveal" style="margin-top:36px">
+      When you understand how your mind and nervous system work, you can stop feeling
+      <span class="serif em-italic" style="color:var(--clay)">controlled</span> by stress and emotions — and start responding to life with more clarity, steadiness, and intention.
+    </p>
+    <p class="big second reveal">
+      We help you make sense of the patterns behind your thoughts, emotions, and reactions, then give you practical tools to navigate them more effectively in real life.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== THE RESOLV WAY ===================== -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="way reveal" style="padding:54px 54px 56px">
+      <div class="sec-head">
+        <span class="eyebrow">The Resolv Way</span>
+        <h2 style="font-size:clamp(2rem,3.8vw,2.9rem);margin-top:16px">Four beliefs that shape <span class="serif em-italic hl-ochre">every</span> plan.</h2>
+      </div>
+      <div class="way-grid">
+        <div class="tenet">
+          <div class="tn-head">
+            <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 6.8C10.4 5.3 7.4 4.7 4 5.2v13c3.4-.5 6.4.1 8 1.6 1.6-1.5 4.6-2.1 8-1.6v-13c-3.4-.5-6.4.1-8 1.6z"/><path d="M12 6.8V20.8"/></svg></span>
+            <span class="tn">Belief 01</span>
+          </div>
+          <h3>Mental health you can learn</h3>
+          <p>Mental health is not just something you have. It is something you can understand, practice, and strengthen over time.</p>
+        </div>
+        <div class="tenet">
+          <div class="tn-head">
+            <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l5.5-5.5 3.5 3.5L21 6"/><path d="M16 6h5v5"/></svg></span>
+            <span class="tn">Belief 02</span>
+          </div>
+          <h3>Progress over labels</h3>
+          <p>Diagnosis can guide care, but it does not define you. We measure progress by how your life is working — not by a label.</p>
+        </div>
+        <div class="tenet">
+          <div class="tn-head">
+            <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8.5" cy="8" r="3"/><path d="M2.5 19a6 6 0 0112 0"/><path d="M16 5.2a3 3 0 010 5.6"/><path d="M21.5 19a6 6 0 00-4.2-5.7"/></svg></span>
+            <span class="tn">Belief 03</span>
+          </div>
+          <h3>Partnership in care</h3>
+          <p>We build the plan with you, not around you — with clear goals, honest feedback, and real accountability.</p>
+        </div>
+        <div class="tenet">
+          <div class="tn-head">
+            <span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9"/><path d="M20.5 5l-8.5 8.5-3-3"/></svg></span>
+            <span class="tn">Belief 04</span>
+          </div>
+          <h3>Real life, real results</h3>
+          <p>The work is not done until you can feel the difference in your everyday life.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW RESOLV WORKS ===================== -->
+<section class="sec" id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">How Resolv Works</span>
+      <h2 style="font-size:clamp(2.2rem,4.2vw,3.2rem);margin-top:16px">A clear path to <span class="serif em-italic hl">progress.</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="num">01</div><div class="bar"></div>
+        <h3>Structured start</h3>
+        <p>We begin with a focused assessment to understand what is happening, what is sustaining it, and what “better” looks like in everyday life.</p>
+      </div>
+      <div class="step reveal">
+        <div class="num">02</div><div class="bar"></div>
+        <h3>Collaborative plan</h3>
+        <p>We build a plan that turns insight into action — with clear goals, practical tools, and measurable outcomes.</p>
+      </div>
+      <div class="step reveal">
+        <div class="num">03</div><div class="bar"></div>
+        <h3>Tools for real life</h3>
+        <p>You learn evidence-based skills to manage emotions, respond more effectively, and strengthen relationships.</p>
+      </div>
+      <div class="step reveal">
+        <div class="num">04</div><div class="bar"></div>
+        <h3>Review and refine</h3>
+        <p>We track what is working, adjust what is not, and stay focused on change you can feel day to day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MID CTA ===================== -->
+<section class="sec" id="start" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2>Ready to start? Your first step is a <span class="serif em-italic">focused conversation.</span></h2>
+      <a href="#" class="btn btn-clay">Get Started <span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHO IS RESOLV FOR ===================== -->
+<section class="sec" id="who" style="padding-top:0">
+  <div class="wrap">
+    <div class="who-intro reveal">
+      <span class="eyebrow">Who Resolv Is For</span>
+      <p class="lead" style="margin-top:18px">Resolv is for people who want more than a label or a place to vent — those who want to understand the patterns shaping how they think, feel, and respond, and make <span class="serif em-italic" style="color:var(--clay)">meaningful progress</span> in everyday life.</p>
+    </div>
+
+    <div class="patterns">
+      <h3 class="pt-h serif reveal">Common patterns under pressure</h3>
+      <p class="pt-p reveal">You may be holding it together externally while feeling overwhelmed internally. You may understand your struggles intellectually but still feel stuck repeating them. Or you may be in a season where something needs to change — and you want a clearer path forward.</p>
+
+      <div class="timeline">
+        <!-- Silent Provider -->
+        <div class="tl-item reveal">
+          <div class="tl-node"><div class="tl-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v1.5M3 12a9 9 0 0118 0c-1.4-1.1-2.6-1.1-4 0-1.4-1.1-2.6-1.1-4 0-1.4-1.1-2.6-1.1-4 0-1.4-1.1-2.6-1.1-4 0z"/><path d="M12 12v7a2.2 2.2 0 01-4.4 0"/></svg></div></div>
+          <div class="tl-body">
+            <h3>The Silent Provider</h3>
+            <p class="signs">You carry the load quietly, keep things moving, and hold it together for everyone else — often without saying how much it is costing you.</p>
+            <p class="feel">“Quiet pressure. Running on empty.”</p>
+            <p class="want"><b>You want</b> relief and steadiness without losing your strength or sense of responsibility.</p>
+          </div>
+        </div>
+        <!-- Burned-Out Achiever -->
+        <div class="tl-item reveal">
+          <div class="tl-node"><div class="tl-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="8" width="17" height="9" rx="2"/><path d="M22 11v3"/><path d="M5.5 11v3"/></svg></div></div>
+          <div class="tl-body">
+            <h3>The Burned-Out Achiever</h3>
+            <p class="signs">You perform at a high level and keep pushing, but the pressure is catching up. Irritability, fatigue, and mental overload are harder to ignore.</p>
+            <p class="feel">“Overloaded. Always ‘on.’”</p>
+            <p class="want"><b>You want</b> clarity, focus, and a more sustainable way to function.</p>
+          </div>
+        </div>
+        <!-- Pressure-Cooker -->
+        <div class="tl-item reveal">
+          <div class="tl-node"><div class="tl-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18a8 8 0 1116 0"/><path d="M12 18l4-5"/><circle cx="12" cy="18" r="1.4" fill="var(--olive)" stroke="none"/></svg></div></div>
+          <div class="tl-body">
+            <h3>The Pressure-Cooker</h3>
+            <p class="signs">You hold things in until they come out sideways — snapping, shutting down, spiraling, or regretting how you reacted afterward.</p>
+            <p class="feel">“Tension building beneath the surface.”</p>
+            <p class="want"><b>You want</b> better control before reactions take over.</p>
+          </div>
+        </div>
+        <!-- Cycle Breaker -->
+        <div class="tl-item reveal">
+          <div class="tl-node"><div class="tl-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 00-14-4.5L3.5 9"/><path d="M3.5 4.5V9H8"/><path d="M4 13a8 8 0 0014 4.5l2.5-2.5"/><path d="M20.5 19.5V15H16"/></svg></div></div>
+          <div class="tl-body">
+            <h3>The Cycle Breaker</h3>
+            <p class="signs">The same arguments, habits, emotional reactions, or relationship dynamics keep repeating — even though you can see the pattern clearly.</p>
+            <p class="feel">“Frustrated and stuck.”</p>
+            <p class="want"><b>You want</b> a practical framework to interrupt the pattern and create change.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHAT WE HELP WITH ===================== -->
+<section class="sec" id="help" style="padding-top:0">
+  <div class="wrap">
+    <div class="help reveal" style="padding:56px 54px 60px">
+      <div class="sec-head">
+        <span class="eyebrow">What We Help With</span>
+        <h2 style="font-size:clamp(2rem,3.8vw,2.9rem);margin-top:16px">When stress and recurring patterns start shaping <span class="serif em-italic hl-ochre">too much</span> of daily life.</h2>
+        <p style="color:var(--ink-soft);margin-top:14px;max-width:40rem">Whether you feel overwhelmed, stuck, reactive, shut down, or stretched too thin, we focus on helping you understand what is happening and create meaningful progress.</p>
+      </div>
+      <div class="help-grid">
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <h3>Anxiety &amp; Constant Pressure</h3>
+          <p>Overthinking, panic, social anxiety, and a mind that will not switch off.</p>
+        </div>
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><path d="M3 15s2-3 9-3 9 3 9 3"/><path d="M8 9h.01M16 9h.01"/></svg></div>
+          <h3>Depression &amp; Burnout</h3>
+          <p>Low motivation, loss of interest, disconnection, and feeling flat or shut down.</p>
+        </div>
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div>
+          <h3>Anger &amp; Emotional Reactivity</h3>
+          <p>Bottling things up, escalating quickly, and regretting how things came out afterward.</p>
+        </div>
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div>
+          <h3>ADHD &amp; Focus Challenges</h3>
+          <p>Difficulty sustaining attention, impulsivity, disorganization, and executive-function struggles.</p>
+        </div>
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><path d="M20 8.5a4.5 4.5 0 00-8-2.8A4.5 4.5 0 004 8.5c0 4 8 9.5 8 9.5s8-5.5 8-9.5z"/></svg></div>
+          <h3>Relationship &amp; Intimacy Concerns</h3>
+          <p>Recurring conflict, difficulty expressing needs clearly, and challenges with desire and intimacy.</p>
+        </div>
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><path d="M12 3v18M5 8l7-5 7 5"/></svg></div>
+          <h3>Trauma &amp; Major Life Changes</h3>
+          <p>Loss, divorce, identity shifts, and past experiences that continue to disrupt your footing.</p>
+        </div>
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-7-10a4 4 0 017-2.65A4 4 0 0119 11c0 5.65-7 10-7 10z"/><path d="M9 12h6"/></svg></div>
+          <h3>Substance Use &amp; Compulsive Coping</h3>
+          <p>Using alcohol, substances, or other coping patterns to manage stress and emotional discomfort.</p>
+        </div>
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><path d="M3 12h4l2 6 4-14 2 8h6"/></svg></div>
+          <h3>Bipolar Spectrum &amp; Mood Instability</h3>
+          <p>Shifts in mood, energy, sleep, and impulse control that affect day-to-day functioning.</p>
+        </div>
+        <div class="hcard">
+          <div class="hi"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18 9 9 0 000-18z"/><path d="M12 7a5 5 0 000 10"/></svg></div>
+          <h3>OCD &amp; Intrusive Thoughts</h3>
+          <p>Repetitive thoughts, compulsions, rumination, and mental loops that are hard to interrupt.</p>
+        </div>
+      </div>
+      <div class="help-foot">
+        <a href="#" class="btn btn-primary">Explore Our Services <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TESTIMONIALS ===================== -->
+<section class="sec testi" id="testimonials" style="padding-top:0">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow center" style="justify-content:center">Results</span>
+      <h2 style="margin-top:14px">What patients are saying about <span class="serif em-italic hl">Resolv.</span></h2>
+      <p class="sub">Real progress, in their own words.</p>
+    </div>
+
+    <div class="quote-stage reveal">
+      <figure class="quote on">
+        <div class="mark">“</div>
+        <blockquote>Very approachable therapy methods that specifically address you and your emotional challenges as an individual.</blockquote>
+        <figcaption class="who"><span class="av"></span><span><span class="nm">M.H.</span><br><span class="ro">24 · Firefighter</span></span></figcaption>
+      </figure>
+      <figure class="quote">
+        <div class="mark">“</div>
+        <blockquote>I appreciate the time I was given to express myself. She gave me sound advice on how to cope with my anxiety and stress at work and at home.</blockquote>
+        <figcaption class="who"><span class="av"></span><span><span class="nm">L.R.</span><br><span class="ro">32 · Civil Engineer</span></span></figcaption>
+      </figure>
+      <figure class="quote">
+        <div class="mark">“</div>
+        <blockquote>Always honest, always great advice. I learned a lot of techniques to minimize my anxiety in specific situations. A major success all around.</blockquote>
+        <figcaption class="who"><span class="av"></span><span><span class="nm">S.T.</span><br><span class="ro">28 · Graphic Designer</span></span></figcaption>
+      </figure>
+      <figure class="quote">
+        <div class="mark">“</div>
+        <blockquote>Very good listener, very helpful. I'm happy I called to speak with someone to help me in my time of need.</blockquote>
+        <figcaption class="who"><span class="av"></span><span><span class="nm">D.M.</span><br><span class="ro">45 · History Teacher</span></span></figcaption>
+      </figure>
+    </div>
+
+    <div class="dots" id="dots"></div>
+  </div>
+</section>
+
+<!-- ===================== FINAL CTA ===================== -->
+<section class="hero" style="padding:8px 0 0">
+  <div class="wrap">
+    <div class="final-card reveal">
+      <div class="final-copy">
+        <span class="eyebrow">Ready to move ahead?</span>
+        <h2>Understand what's getting in the way — and build a more <span class="serif em-italic hl">effective</span> approach.</h2>
+        <p>If you are ready to make sense of the patterns and create change you can feel, we are ready to work alongside you.</p>
+        <a href="#" class="btn btn-primary">Let's Get to Work <span class="arr">→</span></a>
+      </div>
+      <div class="final-media">
+        <div class="ph">
+          <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 17l-5-4-7 6"/></svg>Closing image</span>
+          <span class="cap">Two people, warm and hopeful — a step forward together</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-top">
+      <div>
+        <span class="brand">Resolv<span class="dot" style="color:var(--clay)">.</span></span>
+        <p class="tagline">Feel better,<br>live brighter.</p>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Mission &amp; Values</a></li>
+          <li><a href="#">Meet the Team</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Blog &amp; Articles</a></li>
+          <li><a href="#">Self-Help Guides</a></li>
+          <li><a href="#">Insurance &amp; Billing</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@resolvpsych.com">hello@resolvpsych.com</a></li>
+          <li><a href="tel:8885550198">(888) 555-0198</a></li>
+          <li><a href="#">Book a consult</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 Resolv Psychiatry &amp; Wellness. All rights reserved.</span>
+      <span>Privacy Policy · Terms · Good Faith Estimate</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // sticky nav background
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 12);
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  // mobile menu
+  const mm = document.getElementById('mobileMenu');
+  document.getElementById('menuBtn').addEventListener('click', ()=>mm.classList.add('open'));
+  document.getElementById('menuClose').addEventListener('click', ()=>mm.classList.remove('open'));
+  mm.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>mm.classList.remove('open')));
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // testimonial carousel
+  const quotes = Array.from(document.querySelectorAll('.quote'));
+  const dotsWrap = document.getElementById('dots');
+  let idx = 0, timer;
+  quotes.forEach((_,i)=>{
+    const b = document.createElement('button');
+    b.setAttribute('aria-label','Testimonial '+(i+1));
+    if(i===0) b.classList.add('on');
+    b.addEventListener('click', ()=>{ show(i); reset(); });
+    dotsWrap.appendChild(b);
+  });
+  const dotEls = Array.from(dotsWrap.children);
+  function show(n){
+    quotes[idx].classList.remove('on'); dotEls[idx].classList.remove('on');
+    idx = n; 
+    quotes[idx].classList.add('on'); dotEls[idx].classList.add('on');
+  }
+  function next(){ show((idx+1)%quotes.length); }
+  function reset(){ clearInterval(timer); timer = setInterval(next, 5500); }
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){ reset(); }
+</script>
+</body>
+</html>
