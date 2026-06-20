@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>myDevices — Pricing</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #fff; color: #1A1A1A; }
+:root { --navy:#0F2A3F; --navy2:#1E3A8A; --blue:#0D8DDB; --teal:#14B8A6; --teal2:#5EEAD4; --ice:#CADCFC; --slate:#64748B; --mid:#94A3B8; --border:#E8EBEF; --light:#F7F9FB; --amber:#D97706; }
+.section { padding: 0 48px; }
+.inner { max-width: 1080px; margin: 0 auto; }
+
+/* HEAD */
+.phead { text-align: center; padding: 72px 48px 44px; }
+.kicker { font-size: 15px; font-weight: 700; color: #2C8DD7; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+.h1 { font-size: 44px; font-weight: 800; color: var(--navy); letter-spacing: -1px; margin-bottom: 14px; line-height: 1.1; }
+.hl-accent { color: var(--blue); }
+.intro { font-size: 16px; color: var(--slate); line-height: 1.6; max-width: 760px; margin: 0 auto; }
+.intro strong { color: var(--navy); font-weight: 600; }
+
+/* TWO TIERS */
+.tiers { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1100px; margin: 0 auto; }
+.tier { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 34px 32px; display: flex; flex-direction: column; position: relative; }
+.tier.featured { border: 2px solid var(--navy2); box-shadow: 0 18px 44px rgba(30,58,138,0.13); }
+.tier-name { font-size: 12px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.tier-title { font-size: 23px; font-weight: 800; color: var(--navy); letter-spacing: -0.4px; margin-bottom: 8px; }
+.tier-tag { font-size: 14px; color: var(--slate); line-height: 1.5; margin-bottom: 24px; min-height: 44px; }
+.tier-price-big { font-size: 30px; font-weight: 800; color: var(--navy); letter-spacing: -1px; margin-bottom: 4px; }
+.tier-price-big span { font-size: 15px; font-weight: 500; color: var(--mid); letter-spacing: 0; }
+.tier-price-note { font-size: 12.5px; color: var(--mid); margin-bottom: 20px; }
+.tier-cta { display: block; text-align: center; padding: 13px; border-radius: 9px; font-size: 14px; font-weight: 600; margin-bottom: 24px; text-decoration: none; cursor: pointer; transition: background .2s ease, color .2s ease, border-color .2s ease; }
+.cta-solid { background: var(--navy2); color: #fff; border: 1px solid var(--navy2); }
+.cta-solid:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.cta-outline { background: #fff; color: var(--navy2); border: 1px solid #D6DBE1; }
+.cta-outline:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.scale-box { background: var(--light); border-radius: 10px; padding: 16px 18px; margin-bottom: 22px; }
+.scale-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #EDF0F3; }
+.scale-row:last-child { border-bottom: none; }
+.scale-tier { color: var(--slate); }
+.scale-cost { font-weight: 700; color: var(--navy); }
+
+/* PRICING SLIDER (embedded) */
+.calc-box { background: var(--light); border-radius: 12px; padding: 20px 20px 18px; margin-bottom: 22px; }
+.calc-total { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2px; }
+.calc-total-price { font-size: 30px; font-weight: 800; color: var(--navy); letter-spacing: -1px; }
+.calc-total-price span { font-size: 14px; font-weight: 500; color: var(--mid); letter-spacing: 0; }
+.calc-blended { font-size: 12px; font-weight: 700; color: var(--teal); text-align: right; }
+.calc-blended span { display: block; font-size: 9px; font-weight: 600; color: var(--mid); text-transform: uppercase; letter-spacing: 0.5px; }
+.calc-annual { font-size: 11.5px; color: #047857; font-weight: 600; margin-bottom: 14px; }
+.calc-dev { display: flex; align-items: baseline; gap: 7px; margin-bottom: 4px; }
+.calc-dev-num { font-size: 17px; font-weight: 800; color: var(--navy); }
+.calc-dev-lbl { font-size: 12px; color: var(--mid); }
+.calc-box input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 5px; border-radius: 4px; background: var(--ice); outline: none; margin: 4px 0 6px; }
+.calc-box input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--navy2); cursor: pointer; border: 4px solid #fff; box-shadow: 0 2px 7px rgba(30,58,138,0.35); }
+.calc-box input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--navy2); cursor: pointer; border: 4px solid #fff; box-shadow: 0 2px 7px rgba(30,58,138,0.35); }
+.calc-ticks { display: flex; justify-content: space-between; font-size: 10px; color: var(--mid); }
+.tier-list { list-style: none; flex: 1; }
+.tier-list-lbl { font-size: 10px; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.tier-item { display: flex; gap: 10px; font-size: 13.5px; color: #475569; line-height: 1.45; padding: 6px 0; }
+.tier-check { color: var(--teal); flex-shrink: 0; font-weight: 700; }
+
+/* AGENTS ADD-ON BAND */
+.addon { background: var(--light); margin-top: 64px; padding: 64px 48px; }
+.addon-head { text-align: center; max-width: 820px; margin: 0 auto 40px; }
+.addon-h2 { font-size: 44px; font-weight: 800; color: var(--navy); letter-spacing: -0.6px; margin-bottom: 12px; line-height: 1.1; }
+.addon-h2 span { color: var(--blue); }
+.addon-sub { font-size: 15px; color: var(--slate); line-height: 1.6; }
+.addon-sub strong { color: var(--navy); font-weight: 600; }
+.addon-price-banner { display: inline-flex; align-items: stretch; background: #fff; border: 1px solid var(--border); border-radius: 12px; margin-top: 20px; overflow: hidden; }
+.addon-price-part { padding: 16px 26px; text-align: left; }
+.addon-price-part + .addon-price-part { border-left: 1px solid var(--border); }
+.addon-price-cap { font-size: 10px; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.addon-price-num { font-size: 26px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; }
+.addon-price-num small { font-size: 14px; font-weight: 600; color: var(--slate); letter-spacing: 0; }
+.addon-price-lbl { font-size: 12.5px; color: var(--slate); margin-top: 3px; }
+.addon-free { display: inline-block; margin-top: 16px; background: #ECFDF5; color: #047857; font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 20px; }
+.agents-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; max-width: 1100px; margin: 0 auto; }
+.agent { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 24px 26px; border-left: 4px solid; display: flex; gap: 16px; }
+.agent-ico { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.agent-ico svg { width: 21px; height: 21px; }
+.agent-name { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+.agent-name span { font-size: 10px; font-weight: 700; color: var(--teal); background: #ECFDF5; padding: 2px 8px; border-radius: 5px; margin-left: 8px; vertical-align: middle; }
+.agent-desc { font-size: 13px; color: var(--slate); line-height: 1.5; margin-bottom: 8px; min-height: 39px; }
+.agent-saves { font-size: 12px; font-weight: 600; color: var(--navy2); }
+.addon-foot { text-align: center; font-size: 13px; color: var(--mid); margin-top: 32px; line-height: 1.6; }
+.addon-foot strong { color: var(--navy); }
+
+/* FAQ accordion */
+.faq { padding: 64px 48px; }
+.faq-title { text-align: center; font-size: 44px; font-weight: 800; color: var(--navy); letter-spacing: -0.5px; margin-bottom: 32px; }
+.faq-list { max-width: 900px; margin: 0 auto; border-top: 1px solid var(--border); }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q { display: flex; align-items: center; justify-content: space-between; gap: 18px; width: 100%; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; font-size: 16px; font-weight: 700; color: var(--navy); padding: 20px 2px; transition: color .15s ease; }
+.faq-q:hover { color: var(--blue); }
+.faq-chev { flex-shrink: 0; width: 18px; height: 18px; color: var(--blue); transition: transform .25s ease; }
+.faq-item.open .faq-chev { transform: rotate(180deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+.faq-a-inner { padding: 0 2px 22px; font-size: 14px; color: var(--slate); line-height: 1.65; }
+.faq-item.open .faq-a { max-height: 320px; }
+
+/* SENSORS BAND */
+.sensors-band { max-width: 1100px; margin: 0 auto; background: #0F2A3F; border-radius: 16px; padding: 28px 34px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.sensors-left { display: flex; align-items: center; gap: 20px; }
+.sensors-ico { width: 52px; height: 52px; border-radius: 13px; background: rgba(13,141,219,0.12); border: 1px solid rgba(13,141,219,0.30); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sensors-ico svg { width: 26px; height: 26px; }
+.sensors-h { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.sensors-sub { font-size: 13.5px; color: rgba(202,220,252,0.75); line-height: 1.55; max-width: 540px; }
+.sensors-cta { background: var(--blue); color: #fff; font-size: 13.5px; font-weight: 700; padding: 12px 22px; border-radius: 8px; text-decoration: none; white-space: nowrap; flex-shrink: 0; border: 1px solid var(--blue); transition: background .2s ease, color .2s ease, border-color .2s ease; }
+.sensors-cta:hover { background: #0A6FA8; border-color: #0A6FA8; color: #fff; }
+
+/* CTA */
+.cta { background: linear-gradient(135deg,#0F2A3F,#1E3A8A); padding: 64px 48px; text-align: center; }
+.cta-h { font-size: 44px; font-weight: 800; color: #fff; letter-spacing: -0.6px; margin-bottom: 14px; line-height: 1.1; }
+.cta-sub { font-size: 19px; color: rgba(202,220,252,0.7); margin-bottom: 28px; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; }
+.cta-p { background: #fff; color: var(--navy); font-size: 14px; font-weight: 700; padding: 14px 30px; border-radius: 8px; text-decoration: none; border: 1px solid #fff; transition: background .2s ease, color .2s ease; }
+.cta-p:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.cta-s { background: transparent; color: #fff; font-size: 14px; font-weight: 500; padding: 14px 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); text-decoration: none; transition: background .2s ease, color .2s ease, border-color .2s ease; }
+.cta-s:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+</style>
+</head>
+<body>
+
+<!-- PRICING AT TOP -->
+<div class="phead">
+  <div class="kicker">Pricing</div>
+  <div class="h1">Your operations, answerable.<br><span class="hl-accent">Built for the enterprise.</span></div>
+  <p class="intro">One platform that brings your operational data live into <strong>Claude, Copilot, ChatGPT, or Gemini</strong> — so your team can ask anything and build their own agents on data they can trust. A flat platform fee plus a simple per-device rate that <strong>drops as you scale</strong>.</p>
+</div>
+
+<div class="section">
+  <div class="tiers">
+    <!-- PLATFORM -->
+    <div class="tier featured">
+      <div class="tier-name">Platform</div>
+      <div class="tier-title">Connect &amp; ask</div>
+      <div class="tier-tag">Your operational data, live inside the AI tools your team already uses. Ask anything, build agents, trust the answers.</div>
+      <div class="tier-price-big">From $1,000 <span>/ month</span></div>
+      <div class="tier-price-note">Flat platform fee covers your first 50 devices · drag to estimate</div>
+      <a class="tier-cta cta-solid">Start free trial</a>
+      <div class="calc-box">
+        <div class="calc-total">
+          <div class="calc-total-price" id="calcTotal">$1,450<span>/mo</span></div>
+          <div class="calc-blended" id="calcBlended">$2.90<span>blended / device</span></div>
+        </div>
+        <div class="calc-annual" id="calcAnnual">$1,233/mo with annual commitment (save 15%)</div>
+        <div class="calc-dev">
+          <span class="calc-dev-num" id="calcDevNum">500</span>
+          <span class="calc-dev-lbl">devices connected</span>
+        </div>
+        <input type="range" id="calcSlider" min="0" max="20000" value="500" step="10">
+        <div class="calc-ticks"><span>0</span><span>5k</span><span>10k</span><span>15k</span><span>20k</span></div>
+      </div>
+      <ul class="tier-list">
+        <div class="tier-list-lbl">Includes</div>
+        <li class="tier-item"><span class="tier-check">✓</span><strong>The myDevices AI Connector</strong> — your live data inside Claude, Copilot, ChatGPT &amp; Gemini</li>
+        <li class="tier-item"><span class="tier-check">✓</span>The full myDevices platform — apps, console, decoders &amp; API</li>
+        <li class="tier-item"><span class="tier-check">✓</span>Ask anything; build unlimited agents in your own AI</li>
+        <li class="tier-item"><span class="tier-check">✓</span>Baselines, anomaly scoring, business context</li>
+        <li class="tier-item"><span class="tier-check">✓</span>650+ certified device types</li>
+        <li class="tier-item"><span class="tier-check">✓</span>Save 15% on an annual commitment · 14-day free trial</li>
+      </ul>
+    </div>
+
+    <!-- ENTERPRISE -->
+    <div class="tier">
+      <div class="tier-name">Enterprise</div>
+      <div class="tier-title">Custom &amp; white-glove</div>
+      <div class="tier-tag">For global and multi-location operators who need dedicated people, custom engineering, and white-glove service — not just a bigger device count.</div>
+      <div class="tier-price-big">Custom</div>
+      <div class="tier-price-note">Annual contract · tailored SOW · multi-location or global rollout</div>
+      <a class="tier-cta cta-outline">Talk to sales</a>
+      <ul class="tier-list">
+        <div class="tier-list-lbl">Everything in Platform, plus white-glove service</div>
+        <li class="tier-item"><span class="tier-check">✓</span><strong>Dedicated account manager</strong> &amp; private Slack channel</li>
+        <li class="tier-item"><span class="tier-check">✓</span>Custom engineering &amp; integrations — CMMS, ERP, BMS, SCADA</li>
+        <li class="tier-item"><span class="tier-check">✓</span>Warehouse &amp; logistics services — provisioning, staging, shipping</li>
+        <li class="tier-item"><span class="tier-check">✓</span>White-label &amp; multi-tenant deployment</li>
+        <li class="tier-item"><span class="tier-check">✓</span>SOC 2 · SSO · priority SLA &amp; onboarding</li>
+        <li class="tier-item"><span class="tier-check">✓</span>Volume device pricing beyond the calculator</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- NO SENSORS? -->
+<div class="section" style="margin-top:48px;">
+  <div class="sensors-band">
+    <div class="sensors-left">
+      <div class="sensors-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0D8DDB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a8 8 0 0 1 8-8m0 0a8 8 0 0 1 8 8M8 14a4 4 0 0 1 8 0"/><circle cx="12" cy="14" r="1"/></svg>
+      </div>
+      <div>
+        <div class="sensors-h">Don't have sensors yet? Most of our customers didn't either.</div>
+        <div class="sensors-sub">We recommend the right hardware, provision and ship it pre-configured, and install it if you need us to. You go from zero to live answers in weeks — without running an IoT project for a year.</div>
+      </div>
+    </div>
+    <a class="sensors-cta" href="#">Talk to sales →</a>
+  </div>
+</div>
+
+<!-- AGENTS ADD-ON -->
+<div class="addon">
+  <div class="addon-head">
+    <div class="addon-h2">Build <span>unlimited agents</span> on your data.</div>
+    <p class="addon-sub">An agent is a workflow that runs on your live data and delivers a finished outcome — a report, an audit package, a work order. <strong>We build your first one with you, then you can create as many more as you want in your own Claude or Copilot — we don't charge per agent.</strong></p>
+    <div class="addon-price-banner">
+      <div class="addon-price-part">
+        <div class="addon-price-cap">One-time setup</div>
+        <div class="addon-price-num"><small>Quoted per engagement</small></div>
+        <div class="addon-price-lbl">We interview your team &amp; build your first agent</div>
+      </div>
+      <div class="addon-price-part">
+        <div class="addon-price-cap">Then</div>
+        <div class="addon-price-num">Build all<small> you want</small></div>
+        <div class="addon-price-lbl">In your own Claude or Copilot — no per-agent fee from us</div>
+      </div>
+    </div>
+    <div><span class="addon-free">✦ First agent built for you, free, during onboarding</span></div>
+  </div>
+  <div class="agents-grid">
+    <div class="agent" style="border-left-color:#D97706;">
+      <div class="agent-ico" style="background:#FFF7ED;"><svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div>
+        <div class="agent-name">Energy</div>
+        <div class="agent-desc">Baselines, anomaly alerts, and variance analysis, with monthly energy reports filed on schedule.</div>
+        <div class="agent-saves">Eliminates manual data pulls &amp; monthly reporting</div>
+      </div>
+    </div>
+    <div class="agent" style="border-left-color:#059669;">
+      <div class="agent-ico" style="background:#ECFDF5;"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></div>
+      <div>
+        <div class="agent-name">ISO 50001 <span>POPULAR</span></div>
+        <div class="agent-desc">Audit-ready compliance reports, SEU registers, and EnPI tracking, filed on your audit schedule.</div>
+        <div class="agent-saves">Eliminates ~6 weeks of audit prep per cycle</div>
+      </div>
+    </div>
+    <div class="agent" style="border-left-color:#2563EB;">
+      <div class="agent-ico" style="background:#EFF6FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div>
+        <div class="agent-name">Cold Chain</div>
+        <div class="agent-desc">Temperature monitoring, excursion detection, and FDA-ready deviation reports, filed automatically.</div>
+        <div class="agent-saves">Eliminates manual excursion logging &amp; reporting</div>
+      </div>
+    </div>
+    <div class="agent" style="border-left-color:#7C3AED;">
+      <div class="agent-ico" style="background:#F5F3FF;"><svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.2 4.2l2.8 2.8m10 10l2.8 2.8M1 12h4m14 0h4M4.2 19.8l2.8-2.8m10-10l2.8-2.8"/></svg></div>
+      <div>
+        <div class="agent-name">Machine Health</div>
+        <div class="agent-desc">Vibration and runtime monitoring, anomalies flagged, and work orders filed before any failure.</div>
+        <div class="agent-saves">Eliminates manual rounds &amp; reactive downtime</div>
+      </div>
+    </div>
+  </div>
+  <div class="addon-foot"><strong>Want one built for you?</strong> We'll build any agent for a recurring operational workflow during setup — then you own it. Talk to sales.</div>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <div class="faq-title">Questions &amp; answers</div>
+  <div class="faq-list">
+    <div class="faq-item open">
+      <button class="faq-q">How is the platform priced?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><div class="faq-a-inner">A flat $1,000/mo platform fee that includes your first 50 devices, plus a per-device rate that drops as you scale — $1/device to 1,000, $0.75 to 5,000, $0.50 to 10,000, and $0.25 beyond. Annual commitments save 15%.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">What counts as a device?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><div class="faq-a-inner">A device is any individual sensor, meter, or endpoint connected to the platform — the things that produce readings. Gateways that simply carry that data to the cloud aren't counted as devices.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">What exactly is an agent?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><div class="faq-a-inner">A workflow that runs on your live data and delivers a finished outcome — a report, an audit package, a work order. We build your first one with you, and you can build more yourself in your own Claude or Copilot.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Do I need to be technical to use this?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><div class="faq-a-inner">No. The AI Connector brings your data into the AI tools you already use, and we set up your agents for you. You just ask questions in plain language and get answers built on data you can trust.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">What does an agent cost?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><div class="faq-a-inner">There's a one-time setup fee (quoted per engagement) where we interview your team and build your first agent. After that, you can create as many agents as you want in your own Claude or Copilot — we don't charge per agent or per application like most platforms do. They run on the data from your platform plan.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">What happens to an agent if I cancel?<svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><div class="faq-a-inner">Agents run on your live myDevices data through the AI Connector. If your subscription ends, the agent loses its data feed and stops producing results — your reports and answers go with it.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <div class="cta-h">See what an agent would<br>eliminate for your team.</div>
+  <div style="max-width:600px;margin:0 auto;">
+    <p class="cta-sub">Book a 30-minute demo. We'll connect a sample of your sensors and show you the finished outcome — live, on your data.</p>
+    <div class="cta-btns">
+      <a class="cta-p" href="#">Book a demo →</a>
+      <a class="cta-s" href="#">Start free trial</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const PLATFORM=1000, INCLUDED=50, T1=1000, R1=1, T2=5000, R2=0.75, T3=10000, R3=0.5, R4=0.25;
+  const slider=document.getElementById('calcSlider');
+  const fmt=x=>'$'+Math.round(x).toLocaleString();
+  function render(){
+    const n=parseInt(slider.value,10);
+    const t1=Math.max(0,Math.min(n,T1)-INCLUDED);
+    const t2=Math.max(0,Math.min(n,T2)-T1);
+    const t3=Math.max(0,Math.min(n,T3)-T2);
+    const t4=Math.max(0,n-T3);
+    const total=PLATFORM+t1*R1+t2*R2+t3*R3+t4*R4;
+    document.getElementById('calcDevNum').textContent=n.toLocaleString();
+    document.getElementById('calcTotal').innerHTML=fmt(total)+'<span>/mo</span>';
+    document.getElementById('calcBlended').innerHTML=(n>0?'$'+(total/n).toFixed(2):'—')+'<span>blended / device</span>';
+    document.getElementById('calcAnnual').textContent=fmt(total*0.85)+'/mo with annual commitment (save 15%)';
+    const pct=(n/20000)*100;
+    slider.style.background='linear-gradient(to right, var(--navy2) '+pct+'%, var(--ice) '+pct+'%)';
+  }
+  slider.addEventListener('input',render);
+  render();
+})();
+
+document.querySelectorAll('.faq-q').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    btn.parentElement.classList.toggle('open');
+  });
+});
+
+</script>
+</body>
+</html>
