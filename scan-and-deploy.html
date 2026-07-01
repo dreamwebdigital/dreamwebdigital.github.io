@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scan and Deploy — myDevices</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #FFFFFF; color: #1A1A1A; overflow-x: hidden; }
+:root {
+  --navy:#0F2A3F; --navy2:#1E3A8A; --teal:#14B8A6; --teal2:#5EEAD4; --ice:#CADCFC;
+  --slate:#64748B; --mid:#94A3B8; --border:#E8EBEF; --light:#F7F9FB; --white:#FFFFFF;
+}
+a { color: inherit; }
+
+/* NAV */
+.nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 48px; height: 64px; gap: 32px; }
+.nav-logo img { height: 24px; width: auto; display: block; }
+.nav-links { display: flex; gap: 24px; }
+.nav-link { font-size: 14px; color: var(--slate); font-weight: 500; text-decoration: none; }
+.nav-link:hover { color: var(--navy); }
+.nav-right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+.nav-signin { font-size: 13px; color: var(--slate); font-weight: 500; cursor: pointer; text-decoration:none; }
+.nav-cta { background: var(--navy2); color: var(--white); font-size: 13px; font-weight: 600; padding: 10px 20px; border-radius: 7px; border: none; cursor: pointer; font-family: inherit; text-decoration:none; }
+.nav-cta:hover { background: #172f6f; }
+
+/* HERO */
+.hero { position: relative; background: linear-gradient(160deg, #0F2A3F 0%, #14304f 55%, #1E3A8A 130%); padding: 108px 48px 120px; overflow: hidden; }
+.hero::before { content:""; position:absolute; inset:0; background-image: radial-gradient(circle at 1px 1px, rgba(94,234,212,0.10) 1px, transparent 0); background-size: 34px 34px; opacity:.5; }
+.hero-inner { position: relative; max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
+.hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:700; color: var(--teal2); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px; }
+.hero-eyebrow .dot { width:7px; height:7px; border-radius:50%; background: var(--teal); box-shadow:0 0 0 4px rgba(20,184,166,0.2); }
+.hero h1 { font-size: 56px; font-weight: 800; color: #fff; letter-spacing: -1.8px; line-height: 1.03; margin-bottom: 22px; }
+.hero h1 em { font-style: normal; color: var(--teal2); }
+.hero-sub { font-size: 19px; color: rgba(202,220,252,0.9); line-height: 1.6; margin-bottom: 34px; max-width: 520px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary { background: var(--white); color: var(--navy); font-size: 15px; font-weight: 700; padding: 14px 30px; border-radius: 9px; border: none; cursor: pointer; font-family: inherit; text-decoration:none; display:inline-block; }
+.btn-primary:hover { background:#EAF1FB; }
+.btn-ghost { background: transparent; color: #fff; font-size: 15px; font-weight: 500; padding: 14px 28px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; font-family: inherit; text-decoration:none; display:inline-block; }
+.btn-ghost:hover { border-color:#fff; }
+.hero-visual { display:flex; align-items:center; justify-content:center; }
+
+/* SECTIONS */
+.section { padding: 120px 48px; }
+.section.gray { background: var(--light); }
+.section.white { background: var(--white); }
+.feat { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+.feat.rev .feat-text { order: 2; }
+.feat.rev .feat-visual { order: 1; }
+.feat-eyebrow { font-size: 15px; font-weight: 700; color: #1E3A8A; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+.section.gray .feat-eyebrow { color:#1E6FB0; }
+.feat-title { font-size: 40px; font-weight: 700; color: var(--navy); letter-spacing: -1px; line-height: 1.1; margin-bottom: 22px; }
+.feat-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.feat-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 17px; color: #475569; line-height: 1.5; }
+.feat-check { flex-shrink:0; width: 24px; height: 24px; border-radius: 7px; background: rgba(20,184,166,0.12); display:flex; align-items:center; justify-content:center; margin-top:1px; }
+.feat-check svg { width: 13px; height: 13px; }
+.feat-visual { display:flex; align-items:center; justify-content:center; }
+
+/* device panel wrapper for visuals */
+.panel { width: 100%; max-width: 460px; aspect-ratio: 4/3; border-radius: 20px; background: linear-gradient(150deg, #0F2A3F, #1E3A8A); padding: 26px; display:flex; align-items:center; justify-content:center; box-shadow: 0 30px 70px rgba(15,42,63,0.22); border: 1px solid rgba(94,234,212,0.16); }
+.panel.lite { background: linear-gradient(150deg, #EAF1FB, #F7F9FB); border:1px solid var(--border); box-shadow: 0 24px 60px rgba(15,42,63,0.10); }
+.panel svg { width: 100%; height: 100%; }
+
+/* CTA */
+.cta { background: linear-gradient(135deg, var(--navy), var(--navy2)); padding: 120px 48px; text-align: center; }
+.cta h2 { font-size: 48px; font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.08; margin-bottom: 16px; }
+.cta h2 span { color: var(--teal2); }
+.cta p { font-size: 18px; color: rgba(202,220,252,0.88); margin-bottom: 34px; }
+.cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+/* FOOTER */
+footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.06); padding: 64px 48px 40px; }
+.foot-grid { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; }
+.foot-logo img { height: 26px; width:auto; margin-bottom: 16px; }
+.foot-tag { font-size: 14px; color: rgba(202,220,252,0.55); line-height:1.6; max-width: 240px; }
+.foot-social { display:flex; gap:14px; margin-top:20px; }
+.foot-social a { color: rgba(202,220,252,0.55); }
+.foot-social svg { width:18px; height:18px; }
+.foot-col h4 { font-size: 12px; font-weight:700; color:#fff; text-transform:uppercase; letter-spacing:1.4px; margin-bottom:16px; }
+.foot-col a { display:block; font-size:14px; color: rgba(202,220,252,0.65); text-decoration:none; margin-bottom:11px; }
+.foot-col a:hover { color:#fff; }
+.foot-bottom { max-width:1180px; margin: 44px auto 0; padding-top:24px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+.foot-bottom .legal { display:flex; gap:20px; flex-wrap:wrap; }
+.foot-bottom a { font-size:12px; color: rgba(202,220,252,0.5); text-decoration:none; }
+.foot-bottom .copy { font-size:12px; color: rgba(202,220,252,0.4); }
+
+@media (max-width: 940px){
+  .nav { padding: 0 20px; }
+  .nav-links { display:none; }
+  .hero { padding: 72px 22px 84px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; text-align:center; }
+  .hero-eyebrow { justify-content:center; }
+  .hero h1 { font-size: 40px; }
+  .hero-sub { margin-left:auto; margin-right:auto; }
+  .hero-actions { justify-content:center; }
+  .hero-visual .panel { max-width: 360px; }
+  .section { padding: 64px 22px; }
+  .feat { grid-template-columns: 1fr; gap: 36px; }
+  .feat.rev .feat-text { order: 1; }
+  .feat.rev .feat-visual { order: 2; }
+  .feat-title { font-size: 30px; }
+  .cta { padding: 72px 22px; }
+  .cta h2 { font-size: 32px; }
+  footer { padding: 48px 22px 32px; }
+  .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .foot-bottom { justify-content:center; text-align:center; }
+}
+@media (max-width: 520px){
+  .hero h1 { font-size: 33px; }
+  .feat-title { font-size: 26px; }
+  .cta h2 { font-size: 27px; }
+  .foot-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#" class="nav-logo"><img src="data:image/png;base64,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" alt="myDevices"></a>
+  <div class="nav-links">
+    <a href="#" class="nav-link">Why myDevices</a>
+    <a href="#" class="nav-link">Platform</a>
+    <a href="#" class="nav-link">Sensors</a>
+    <a href="#" class="nav-link">Solutions</a>
+    <a href="#" class="nav-link">Plans &amp; Pricing</a>
+    <a href="#" class="nav-link">Partners</a>
+  </div>
+  <div class="nav-right">
+    <a href="#" class="nav-signin">Sign in</a>
+    <a href="#" class="nav-cta">Schedule a Demo</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="dot"></span>Deploy in minutes</div>
+      <h1>Scan and <em>Deploy</em></h1>
+      <p class="hero-sub">The fastest way to set up, configure, visualize, support, and integrate your sensors — no code, no complexity.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Try it Free</a>
+        <a href="#" class="btn-ghost">Schedule a Demo</a>
+      </div>
+    </div>
+    <div class="hero-visual"><div class="panel"><svg viewBox="0 0 460 345" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="150" y="40" width="160" height="265" rx="26" fill="#0B1F30" stroke="rgba(94,234,212,0.35)" stroke-width="1.5"/>
+  <rect x="162" y="58" width="136" height="196" rx="12" fill="#0F2A3F"/>
+  <rect x="205" y="48" width="50" height="6" rx="3" fill="rgba(202,220,252,0.35)"/>
+  <!-- scan frame -->
+  <g stroke="#5EEAD4" stroke-width="3" stroke-linecap="round">
+    <path d="M186 96 v-14 h14"/><path d="M274 96 v-14 h-14"/>
+    <path d="M186 216 v14 h14"/><path d="M274 216 v14 h-14"/>
+  </g>
+  <line x1="186" y1="156" x2="274" y2="156" stroke="#14B8A6" stroke-width="2.5"/>
+  <!-- QR -->
+  <g fill="#CADCFC">
+    <rect x="200" y="120" width="60" height="60" rx="4" fill="rgba(202,220,252,0.12)"/>
+    <rect x="206" y="126" width="14" height="14" rx="2"/><rect x="240" y="126" width="14" height="14" rx="2"/>
+    <rect x="206" y="160" width="14" height="14" rx="2"/>
+    <rect x="226" y="126" width="6" height="6"/><rect x="226" y="140" width="6" height="6"/>
+    <rect x="240" y="150" width="6" height="6"/><rect x="248" y="160" width="6" height="6"/>
+    <rect x="234" y="164" width="6" height="6"/><rect x="226" y="154" width="6" height="6"/>
+  </g>
+  <rect x="180" y="270" width="100" height="10" rx="5" fill="rgba(94,234,212,0.5)"/>
+  <!-- sensor node -->
+  <g transform="translate(60 150)">
+    <rect x="0" y="0" width="78" height="52" rx="9" fill="#14304f" stroke="rgba(94,234,212,0.4)" stroke-width="1.5"/>
+    <circle cx="18" cy="26" r="6" fill="#5EEAD4"/>
+    <rect x="34" y="18" width="34" height="5" rx="2.5" fill="rgba(202,220,252,0.6)"/>
+    <rect x="34" y="30" width="24" height="5" rx="2.5" fill="rgba(202,220,252,0.3)"/>
+    <path d="M78 26 h44" stroke="#14B8A6" stroke-width="2" stroke-dasharray="4 4"/>
+    <circle cx="122" cy="26" r="3" fill="#14B8A6"/>
+  </g>
+</svg></div></div>
+  </div>
+</section>
+
+<section class="section gray"><div class="feat "><div class="feat-text"><div class="feat-eyebrow">Deploy</div><h2 class="feat-title">Easy Install</h2><ul class="feat-list"><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Pre-provisioned sensors ready to deploy</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Scan a QR code to add sensors in the app</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Immediately capture sensor data</span></li></ul></div><div class="feat-visual"><div class="panel"><svg viewBox="0 0 400 300" fill="none">
+  <rect x="150" y="34" width="150" height="232" rx="24" fill="#0B1F30" stroke="rgba(94,234,212,0.3)" stroke-width="1.5"/>
+  <rect x="162" y="52" width="126" height="196" rx="10" fill="#0F2A3F"/>
+  <g stroke="#5EEAD4" stroke-width="3" stroke-linecap="round"><path d="M184 108 v-12 h12"/><path d="M266 108 v-12 h-12"/><path d="M184 192 v12 h12"/><path d="M266 192 v12 h-12"/></g>
+  <line x1="184" y1="150" x2="266" y2="150" stroke="#14B8A6" stroke-width="2.5"/>
+  <g fill="#CADCFC"><rect x="196" y="118" width="12" height="12" rx="2"/><rect x="232" y="118" width="12" height="12" rx="2"/><rect x="196" y="170" width="12" height="12" rx="2"/><rect x="214" y="136" width="6" height="6"/><rect x="228" y="170" width="6" height="6"/><rect x="246" y="154" width="6" height="6"/></g>
+  <rect x="176" y="222" width="98" height="9" rx="4.5" fill="rgba(94,234,212,0.5)"/>
+  <g transform="translate(70 128)"><rect width="66" height="44" rx="8" fill="#14304f" stroke="rgba(94,234,212,0.4)"/><circle cx="16" cy="22" r="5" fill="#5EEAD4"/><rect x="30" y="15" width="28" height="4" rx="2" fill="rgba(202,220,252,0.6)"/><rect x="30" y="25" width="18" height="4" rx="2" fill="rgba(202,220,252,0.3)"/></g>
+</svg></div></div></div></section>
+<section class="section white"><div class="feat rev"><div class="feat-text"><div class="feat-eyebrow">Manage</div><h2 class="feat-title">Device Configuration</h2><ul class="feat-list"><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Remotely manage device configurations from mobile app or dashboard</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Works with downlink command devices</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Store downlink commands and settings</span></li></ul></div><div class="feat-visual"><div class="panel"><svg viewBox="0 0 400 300" fill="none">
+  <rect x="60" y="40" width="280" height="220" rx="16" fill="#0B1F30" stroke="rgba(94,234,212,0.25)"/>
+  <rect x="60" y="40" width="280" height="40" rx="16" fill="#14304f"/>
+  <circle cx="82" cy="60" r="5" fill="#5EEAD4"/><rect x="96" y="56" width="120" height="8" rx="4" fill="rgba(202,220,252,0.5)"/>
+  <g font-family="Inter">
+  <rect x="82" y="102" width="150" height="8" rx="4" fill="rgba(202,220,252,0.55)"/>
+  <rect x="278" y="96" width="40" height="20" rx="10" fill="rgba(94,234,212,0.25)"/><circle cx="308" cy="106" r="8" fill="#5EEAD4"/>
+  <rect x="82" y="140" width="120" height="8" rx="4" fill="rgba(202,220,252,0.55)"/>
+  <rect x="278" y="134" width="40" height="20" rx="10" fill="rgba(94,234,212,0.25)"/><circle cx="308" cy="144" r="8" fill="#5EEAD4"/>
+  <rect x="82" y="178" width="140" height="8" rx="4" fill="rgba(202,220,252,0.55)"/>
+  <rect x="278" y="172" width="40" height="20" rx="10" fill="rgba(202,220,252,0.15)"/><circle cx="290" cy="182" r="8" fill="rgba(202,220,252,0.5)"/>
+  <rect x="82" y="216" width="100" height="8" rx="4" fill="rgba(202,220,252,0.4)"/>
+  <rect x="278" y="210" width="40" height="20" rx="10" fill="rgba(94,234,212,0.25)"/><circle cx="308" cy="220" r="8" fill="#5EEAD4"/>
+  </g>
+</svg></div></div></div></section>
+<section class="section gray"><div class="feat "><div class="feat-text"><div class="feat-eyebrow">Dashboards</div><h2 class="feat-title">Visualize</h2><ul class="feat-list"><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Drag and drop devices and widgets to build custom dashboards</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Fully customizable widgets</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Share dashboards with your team or customers</span></li></ul></div><div class="feat-visual"><div class="panel"><svg viewBox="0 0 400 300" fill="none">
+  <rect x="50" y="42" width="300" height="216" rx="16" fill="#0B1F30" stroke="rgba(94,234,212,0.25)"/>
+  <rect x="66" y="60" width="128" height="86" rx="10" fill="#14304f"/>
+  <path d="M132 128 a34 34 0 1 1 24 -58" stroke="#5EEAD4" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M156 70 a34 34 0 0 1 -24 58" stroke="rgba(202,220,252,0.25)" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <rect x="206" y="60" width="128" height="86" rx="10" fill="#14304f"/>
+  <g><rect x="222" y="110" width="14" height="24" rx="3" fill="#14B8A6"/><rect x="244" y="94" width="14" height="40" rx="3" fill="#5EEAD4"/><rect x="266" y="102" width="14" height="32" rx="3" fill="rgba(202,220,252,0.5)"/><rect x="288" y="86" width="14" height="48" rx="3" fill="#14B8A6"/></g>
+  <rect x="66" y="158" width="268" height="82" rx="10" fill="#14304f"/>
+  <path d="M78 214 L112 196 L146 206 L180 182 L214 192 L248 172 L282 186 L316 168" stroke="#5EEAD4" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="180" cy="182" r="4" fill="#5EEAD4"/><circle cx="316" cy="168" r="4" fill="#5EEAD4"/>
+</svg></div></div></div></section>
+<section class="section white"><div class="feat rev"><div class="feat-text"><div class="feat-eyebrow">Anywhere</div><h2 class="feat-title">Remote Monitoring</h2><ul class="feat-list"><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>App and web dashboard to monitor sensors from anywhere</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Manage one location or hundreds</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Real-time device and alert status</span></li></ul></div><div class="feat-visual"><div class="panel"><svg viewBox="0 0 400 300" fill="none">
+  <rect x="150" y="30" width="152" height="240" rx="24" fill="#0B1F30" stroke="rgba(94,234,212,0.3)"/>
+  <rect x="162" y="48" width="128" height="204" rx="10" fill="#0F2A3F"/>
+  <rect x="174" y="62" width="80" height="8" rx="4" fill="rgba(202,220,252,0.55)"/>
+  <g>
+   <rect x="174" y="84" width="104" height="40" rx="8" fill="#14304f"/><circle cx="192" cy="104" r="7" fill="#5EEAD4"/><rect x="208" y="96" width="54" height="6" rx="3" fill="rgba(202,220,252,0.5)"/><rect x="208" y="108" width="34" height="5" rx="2.5" fill="rgba(202,220,252,0.3)"/>
+   <rect x="174" y="132" width="104" height="40" rx="8" fill="#14304f"/><circle cx="192" cy="152" r="7" fill="#14B8A6"/><rect x="208" y="144" width="48" height="6" rx="3" fill="rgba(202,220,252,0.5)"/><rect x="208" y="156" width="30" height="5" rx="2.5" fill="rgba(202,220,252,0.3)"/>
+   <rect x="174" y="180" width="104" height="40" rx="8" fill="#14304f"/><circle cx="192" cy="200" r="7" fill="#F59E0B"/><rect x="208" y="192" width="52" height="6" rx="3" fill="rgba(202,220,252,0.5)"/><rect x="208" y="204" width="28" height="5" rx="2.5" fill="rgba(202,220,252,0.3)"/>
+  </g>
+</svg></div></div></div></section>
+<section class="section gray"><div class="feat "><div class="feat-text"><div class="feat-eyebrow">Act</div><h2 class="feat-title">Alerts &amp; Work Orders</h2><ul class="feat-list"><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Receive text and email alerts</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Threshold-based alert settings</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Create work orders right in your platform</span></li></ul></div><div class="feat-visual"><div class="panel"><svg viewBox="0 0 400 300" fill="none">
+  <rect x="70" y="70" width="260" height="160" rx="18" fill="#0B1F30" stroke="rgba(94,234,212,0.25)"/>
+  <circle cx="118" cy="122" r="26" fill="rgba(245,158,11,0.15)"/>
+  <path d="M118 108 a10 10 0 0 1 10 10 v8 l3 5 h-26 l3 -5 v-8 a10 10 0 0 1 10 -10z" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M114 137 a4 4 0 0 0 8 0" fill="none" stroke="#F59E0B" stroke-width="2.5"/>
+  <rect x="160" y="104" width="140" height="9" rx="4.5" fill="rgba(202,220,252,0.6)"/>
+  <rect x="160" y="122" width="112" height="7" rx="3.5" fill="rgba(202,220,252,0.35)"/>
+  <rect x="160" y="136" width="90" height="7" rx="3.5" fill="rgba(202,220,252,0.25)"/>
+  <rect x="94" y="178" width="98" height="30" rx="8" fill="#14B8A6"/>
+  <rect x="112" y="189" width="62" height="8" rx="4" fill="#08252f"/>
+  <rect x="204" y="178" width="98" height="30" rx="8" fill="rgba(202,220,252,0.12)"/>
+  <rect x="222" y="189" width="62" height="8" rx="4" fill="rgba(202,220,252,0.5)"/>
+</svg></div></div></div></section>
+<section class="section white"><div class="feat rev"><div class="feat-text"><div class="feat-eyebrow">Connect</div><h2 class="feat-title">Integrations</h2><ul class="feat-list"><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Send data to any CMMS, EMS, BMS, and more</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Connect to Power BI, Tableau, or any analytics program</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Push to any system via webhooks</span></li></ul></div><div class="feat-visual"><div class="panel"><svg viewBox="0 0 400 300" fill="none">
+  <circle cx="200" cy="150" r="40" fill="#14304f" stroke="#5EEAD4" stroke-width="1.5"/>
+  <circle cx="200" cy="150" r="15" fill="#14B8A6"/>
+  <g stroke="rgba(94,234,212,0.5)" stroke-width="2" stroke-dasharray="5 5">
+    <path d="M172 122 L96 76"/><path d="M228 122 L304 76"/><path d="M172 178 L96 224"/><path d="M228 178 L304 224"/><path d="M240 150 L316 150"/>
+  </g>
+  <g>
+   <rect x="52" y="52" width="60" height="48" rx="10" fill="#0B1F30" stroke="rgba(94,234,212,0.35)"/><text x="82" y="81" fill="#CADCFC" font-family="Inter" font-size="14" font-weight="700" text-anchor="middle">CMMS</text>
+   <rect x="288" y="52" width="66" height="48" rx="10" fill="#0B1F30" stroke="rgba(94,234,212,0.35)"/><text x="321" y="81" fill="#CADCFC" font-family="Inter" font-size="14" font-weight="700" text-anchor="middle">BI</text>
+   <rect x="52" y="200" width="60" height="48" rx="10" fill="#0B1F30" stroke="rgba(94,234,212,0.35)"/><text x="82" y="229" fill="#CADCFC" font-family="Inter" font-size="13" font-weight="700" text-anchor="middle">EMS</text>
+   <rect x="288" y="200" width="66" height="48" rx="10" fill="#0B1F30" stroke="rgba(94,234,212,0.35)"/><text x="321" y="229" fill="#CADCFC" font-family="Inter" font-size="12" font-weight="700" text-anchor="middle">Webhook</text>
+   <rect x="322" y="126" width="56" height="48" rx="10" fill="#0B1F30" stroke="rgba(94,234,212,0.35)"/><text x="350" y="155" fill="#CADCFC" font-family="Inter" font-size="13" font-weight="700" text-anchor="middle">BMS</text>
+  </g>
+</svg></div></div></div></section>
+<section class="section gray"><div class="feat "><div class="feat-text"><div class="feat-eyebrow">Teams</div><h2 class="feat-title">Collaborate</h2><ul class="feat-list"><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Invite team members</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Multi-tenancy available</span></li><li><span class="feat-check"><svg viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Share dashboards across your organization</span></li></ul></div><div class="feat-visual"><div class="panel"><svg viewBox="0 0 400 300" fill="none">
+  <rect x="60" y="50" width="280" height="200" rx="16" fill="#0B1F30" stroke="rgba(94,234,212,0.25)"/>
+  <rect x="60" y="50" width="280" height="42" rx="16" fill="#14304f"/>
+  <rect x="80" y="66" width="120" height="10" rx="5" fill="rgba(202,220,252,0.5)"/>
+  <g>
+   <circle cx="96" cy="128" r="16" fill="#14B8A6"/><rect x="122" y="118" width="120" height="8" rx="4" fill="rgba(202,220,252,0.55)"/><rect x="122" y="132" width="80" height="7" rx="3.5" fill="rgba(202,220,252,0.3)"/>
+   <circle cx="96" cy="172" r="16" fill="#5EEAD4"/><rect x="122" y="162" width="140" height="8" rx="4" fill="rgba(202,220,252,0.55)"/><rect x="122" y="176" width="70" height="7" rx="3.5" fill="rgba(202,220,252,0.3)"/>
+   <circle cx="96" cy="216" r="16" fill="rgba(202,220,252,0.35)"/><rect x="122" y="206" width="110" height="8" rx="4" fill="rgba(202,220,252,0.55)"/><rect x="122" y="220" width="90" height="7" rx="3.5" fill="rgba(202,220,252,0.3)"/>
+  </g>
+  <g transform="translate(276 112)"><circle cx="20" cy="20" r="20" fill="rgba(94,234,212,0.15)" stroke="#5EEAD4" stroke-width="1.5"/><path d="M20 12 v16 M12 20 h16" stroke="#5EEAD4" stroke-width="2.5" stroke-linecap="round"/></g>
+</svg></div></div></div></section>
+
+<section class="cta">
+  <h2>Get started <span>today</span>.</h2>
+  <p>Discover how you can create your own connected app in minutes.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-primary">Try it Free</a>
+    <a href="#" class="btn-ghost">Schedule a Demo</a>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo"><img src="data:image/png;base64,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" alt="myDevices" style="filter:brightness(0) invert(1);"></div>
+      <p class="foot-tag">The operational intelligence platform for connecting any sensor to any system.</p>
+      <div class="foot-social">
+        <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.2h3.7l-8 9.1L24 22.8h-7.4l-5.8-7.5-6.6 7.5H.5l8.5-9.7L0 1.2h7.6l5.2 6.9zM17.6 20.6h2L6.5 3.3H4.3z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6z"/></svg></a>
+        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.4h-3.6v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1c.5-.9 1.7-1.9 3.4-1.9 3.6 0 4.3 2.4 4.3 5.5zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.4H3.5V9h3.6z"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7v-3.5h3.1V9.4c0-3 1.8-4.7 4.6-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.2h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg></a>
+      </div>
+    </div>
+    <div class="foot-col"><h4>myDevices</h4><a href="#">Platform</a><a href="#">About</a><a href="#">Contact</a></div>
+    <div class="foot-col"><h4>Resources</h4><a href="#">Security &amp; Compliance</a><a href="#">Developers</a><a href="#">Support</a><a href="#">Device Manufacturers</a></div>
+    <div class="foot-col"><h4>Log in</h4><a href="#">Sensor Store</a><a href="#">IoT in a Box</a><a href="#">Cayenne</a></div>
+  </div>
+  <div class="foot-bottom">
+    <div class="legal"><a href="#">Terms of Service</a><a href="#">Privacy</a><a href="#">Cookie Policy</a><a href="#">CCPA</a></div>
+    <div class="copy">© 2026 myDevices, Inc.</div>
+  </div>
+</footer>
+
+</body>
+</html>
